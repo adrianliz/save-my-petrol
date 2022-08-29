@@ -1,0 +1,5 @@
+spring:
+  codec:
+    max-in-memory-size: 100MB
+
+petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
