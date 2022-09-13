@@ -1,10 +1,6 @@
 package com.adrianliz.savemypetrol.stations.application;
 
-import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationName;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationProduct;
+import com.adrianliz.savemypetrol.stations.domain.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -33,10 +29,10 @@ public class PetrolStationResponse {
 
   public static PetrolStationResponse from(final PetrolStation petrolStation) {
     return new PetrolStationResponse(
-        petrolStation.getId(),
-        petrolStation.getName(),
-        petrolStation.getLocation(),
-        petrolStation.getProducts());
+        petrolStation.id(),
+        petrolStation.name(),
+        petrolStation.location(),
+        petrolStation.products());
   }
 
   @AllArgsConstructor
@@ -52,7 +48,7 @@ public class PetrolStationResponse {
       return new PetrolStationLocationResponse(
           petrolStationLocation.getLatitude(),
           petrolStationLocation.getLongitude(),
-          petrolStationLocation.getAddress());
+          petrolStationLocation.address());
     }
   }
 
@@ -66,7 +62,7 @@ public class PetrolStationResponse {
         final PetrolStationProduct petrolStationProduct) {
 
       return new PetrolStationProductResponse(
-          petrolStationProduct.getType().getName(), petrolStationProduct.getPrice().getCents());
+          petrolStationProduct.type().name(), petrolStationProduct.price().cents());
     }
   }
 }

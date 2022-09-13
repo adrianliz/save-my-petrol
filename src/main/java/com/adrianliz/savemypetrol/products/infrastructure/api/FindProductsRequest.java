@@ -15,8 +15,8 @@ public class FindProductsRequest {
   @NotNull private final Integer targetProductTypeId;
 
   public ProductFilter buildFilter() {
-    final var filter = ProductFilter.builder();
-    filter.targetType(ProductType.findById(targetProductTypeId));
+    final var filter = new ProductFilter.ProductFilterBuilder();
+    filter.targetProductType(ProductType.findById(targetProductTypeId));
     filter.targetPetrolStationsIds(
         targetPetrolStationsIds.stream().map(PetrolStationId::new).collect(Collectors.toList()));
 

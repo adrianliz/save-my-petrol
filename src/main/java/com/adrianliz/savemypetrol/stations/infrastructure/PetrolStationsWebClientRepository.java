@@ -1,8 +1,8 @@
 package com.adrianliz.savemypetrol.stations.infrastructure;
 
 import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationFilter;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationsFilter;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationsRepository;
 import com.hazelcast.map.IMap;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class PetrolStationsWebClientRepository implements PetrolStationsReposito
                         .map(PetrolStationResponse::mapToPetrolStation)
                         .collect(Collectors.toList()))
             .doOnNext(
-                petrolStation -> petrolStationsCache.setAsync(petrolStation.getId(), petrolStation))
+                petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation))
         : Flux.fromIterable(petrolStationsCache.values());
   }
 
@@ -42,12 +42,11 @@ public class PetrolStationsWebClientRepository implements PetrolStationsReposito
   public Mono<PetrolStation> findById(final PetrolStationId id) {
     return Mono.fromCompletionStage(() -> petrolStationsCache.getAsync(id))
         .switchIfEmpty(findAll().filter(petrolStation -> petrolStation.hasId(id)).next())
-        .doOnNext(
-            petrolStation -> petrolStationsCache.setAsync(petrolStation.getId(), petrolStation));
+        .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
   }
 
   @Override
-  public Flux<PetrolStation> find(final PetrolStationsFilter filter) {
+  public Flux<PetrolStation> find(final PetrolStationFilter filter) {
     return petrolStationsCache.isEmpty()
         ? filter.applyTo(findAll())
         : filter.applyTo(Flux.fromIterable(petrolStationsCache.values()));

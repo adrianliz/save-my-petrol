@@ -8,5 +8,5 @@ public interface PetrolStationsRepository {
 
   Mono<PetrolStation> findById(final PetrolStationId id);
 
-  Flux<PetrolStation> find(final PetrolStationsFilter filter);
+  Flux<PetrolStation> find(final PetrolStationFilter filter);
 }

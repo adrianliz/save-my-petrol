@@ -2,7 +2,7 @@ package com.adrianliz.savemypetrol.stations.infrastructure.api;
 
 import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
 import com.adrianliz.savemypetrol.common.domain.Page;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationsFilter;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationFilter;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
@@ -18,8 +18,8 @@ public class FindPetrolStationsRequest {
 
   private final Double maxMetersFromSource;
 
-  public PetrolStationsFilter buildFilter() {
-    final var filter = PetrolStationsFilter.builder();
+  public PetrolStationFilter buildFilter() {
+    final var filter = new PetrolStationFilter.PetrolStationFilterBuilder();
     filter.maxMetersFromSource(maxMetersFromSource != null ? maxMetersFromSource : 10000);
     filter.sourceLocation(new LocationValueObject(sourceLatitude, sourceLongitude) {});
     filter.pageRequested(Page.of(maxElements, offset));

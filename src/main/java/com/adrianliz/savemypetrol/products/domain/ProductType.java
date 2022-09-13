@@ -1,11 +1,7 @@
 package com.adrianliz.savemypetrol.products.domain;
 
 import java.util.Arrays;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@AllArgsConstructor
-@Getter
 public enum ProductType {
   REGULAR_95(1, "Gasolina 95 E5"),
   REGULAR_95_PREMIUM(20, "Gasolina 95 E5 Premium"),
@@ -16,6 +12,11 @@ public enum ProductType {
 
   private final Integer id;
   private final String name;
+
+  ProductType(final Integer id, final String name) {
+    this.id = id;
+    this.name = name;
+  }
 
   public static ProductType findById(final Integer id) {
     return Arrays.stream(ProductType.values())
