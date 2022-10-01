@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class PetrolStationsWebClientConfiguration {
 
-  @Value("${petrolStationsEndpoint}")
+  @Value("${app.petrolStationsEndpoint}")
   private String petrolStationsEndpoint;
 
   @Value("${spring.codec.max-in-memory-size}")

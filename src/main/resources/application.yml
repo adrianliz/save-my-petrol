@@ -2,4 +2,10 @@ spring:
   codec:
     max-in-memory-size: 100MB
 
-petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URI}
+      database: 'save-my-petrol'
+
+app:
+  petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"

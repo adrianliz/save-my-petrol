@@ -1,13 +1,9 @@
-package com.adrianliz.savemypetrol.stations.infrastructure;
+package com.adrianliz.savemypetrol.stations.infrastructure.web;
 
 import com.adrianliz.savemypetrol.common.domain.Currency;
 import com.adrianliz.savemypetrol.products.domain.ProductPrice;
 import com.adrianliz.savemypetrol.products.domain.ProductType;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationName;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationProduct;
+import com.adrianliz.savemypetrol.stations.domain.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

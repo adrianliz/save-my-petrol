@@ -1,4 +1,4 @@
-package com.adrianliz.savemypetrol.stations.infrastructure;
+package com.adrianliz.savemypetrol.stations.infrastructure.web;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
