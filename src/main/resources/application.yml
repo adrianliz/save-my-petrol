@@ -4,8 +4,13 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGO_DB_URI}
-      database: 'save-my-petrol'
+      host: localhost
+      port: ${MONGO_DB_PORT}
+      username: ${MONGO_ROOT_USER}
+      password: ${MONGO_ROOT_PASSWORD}
+      database: ${MONGO_DATABASE}
+      authentication-database: admin
+      auto-index-creation: true
 
 app:
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"

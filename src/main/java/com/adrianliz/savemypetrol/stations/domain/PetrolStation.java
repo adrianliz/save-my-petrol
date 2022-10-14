@@ -43,8 +43,4 @@ public class PetrolStation implements Serializable {
 
     return location.isInBoundaryWith(targetLocation, maxMetersAround);
   }
-
-  public boolean hasId(final PetrolStationId id) {
-    return this.id.equals(id);
-  }
 }

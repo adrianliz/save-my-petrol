@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PetrolStationsCacheConfiguration {
-
   public static final String PETROL_STATIONS_CACHE = "petrolStationsCache";
 
   @Bean
   public IMap<PetrolStationId, PetrolStation> petrolStationsCache(
       final HazelcastInstance hazelcastInstance) {
 
-    hazelcastInstance.getConfig().getMapConfig(PETROL_STATIONS_CACHE).setTimeToLiveSeconds(1800);
+    hazelcastInstance.getConfig().getMapConfig(PETROL_STATIONS_CACHE).setTimeToLiveSeconds(1800000);
     return hazelcastInstance.getMap(PETROL_STATIONS_CACHE);
   }
 }

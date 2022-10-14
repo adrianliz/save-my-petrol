@@ -1,10 +1,8 @@
 package com.adrianliz.savemypetrol.stations.infrastructure.web;
 
 import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
-import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
-import com.adrianliz.savemypetrol.stations.infrastructure.repository.MongoPetrolStationAccessor;
 import com.adrianliz.savemypetrol.stations.infrastructure.repository.PetrolStationConverter;
-import com.hazelcast.map.IMap;
+import com.adrianliz.savemypetrol.stations.infrastructure.repository.record.MongoDataAccessor;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -16,15 +14,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public final class PetrolStationRetriever {
   private final WebClient client;
-  private final MongoPetrolStationAccessor dataAccessor;
-  private final IMap<PetrolStationId, PetrolStation> petrolStationsCache;
+  private final MongoDataAccessor dataAccessor;
 
   private Flux<PetrolStation> fetchPetrolStations() {
     return client
@@ -36,8 +32,7 @@ public final class PetrolStationRetriever {
             petrolStations ->
                 petrolStations.stream()
                     .map(PetrolStationResponse::mapToPetrolStation)
-                    .collect(Collectors.toList()))
-        .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
+                    .collect(Collectors.toList()));
   }
 
   // NOTE: Every 30 min
@@ -65,18 +60,5 @@ public final class PetrolStationRetriever {
                     LocalDateTime.now(),
                     ex.getMessage()))
         .subscribe();
-  }
-
-  public Flux<PetrolStation> findAll() {
-    return dataAccessor
-        .findAll()
-        .map(PetrolStationConverter::toEntity)
-        .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
-  }
-
-  public Mono<PetrolStation> findById(final PetrolStationId id) {
-    return Mono.fromCompletionStage(() -> petrolStationsCache.getAsync(id))
-        .switchIfEmpty(dataAccessor.findById(id.getValue()).map(PetrolStationConverter::toEntity))
-        .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
   }
 }

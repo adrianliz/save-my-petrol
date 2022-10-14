@@ -8,13 +8,17 @@ import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationName;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationProduct;
+import com.adrianliz.savemypetrol.stations.infrastructure.repository.record.PetrolStationProductRecord;
+import com.adrianliz.savemypetrol.stations.infrastructure.repository.record.PetrolStationRecord;
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 public final class PetrolStationConverter {
   public static PetrolStation toEntity(final PetrolStationRecord record) {
     final var id = new PetrolStationId(record.getId());
     final var name = new PetrolStationName(record.getName());
     final var location =
-        new PetrolStationLocation(record.getLatitude(), record.getLongitude(), record.getAddress());
+        new PetrolStationLocation(
+            record.getLocation().getX(), record.getLocation().getY(), record.getAddress());
     final var products =
         record.getProducts().stream()
             .map(
@@ -34,8 +38,7 @@ public final class PetrolStationConverter {
 
     final var location = petrolStation.location();
     recordBuilder.address(location.address());
-    recordBuilder.latitude(location.getLatitude());
-    recordBuilder.longitude(location.getLongitude());
+    recordBuilder.location(new GeoJsonPoint(location.getLatitude(), location.getLongitude()));
 
     recordBuilder.products(
         petrolStation.products().stream()

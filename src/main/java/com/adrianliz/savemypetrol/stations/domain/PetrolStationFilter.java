@@ -2,7 +2,6 @@ package com.adrianliz.savemypetrol.stations.domain;
 
 import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
 import com.adrianliz.savemypetrol.common.domain.Page;
-import reactor.core.publisher.Flux;
 
 public class PetrolStationFilter {
   private final LocationValueObject sourceLocation;
@@ -19,17 +18,26 @@ public class PetrolStationFilter {
     this.pageRequested = pageRequested;
   }
 
-  public Flux<PetrolStation> applyTo(final Flux<PetrolStation> petrolStations) {
-    final var targetPetrolStations =
-        petrolStations
-            .filter(
-                petrolStation ->
-                    petrolStation.isInBoundaryWith(sourceLocation, maxMetersFromSource))
-            .skip(pageRequested.calculateSkippedElements());
+  public Double getSourceLatitude() {
+    return sourceLocation.getLatitude();
+  }
 
-    return pageRequested.hasMaxElements()
-        ? targetPetrolStations.take(pageRequested.calculateMaxElements())
-        : targetPetrolStations;
+  public Double getSourceLongitude() {
+    return sourceLocation.getLongitude();
+  }
+
+  public Double getMaxKmFromSource() {
+    return (maxMetersFromSource != null && maxMetersFromSource > 0)
+        ? maxMetersFromSource / 1000
+        : 0;
+  }
+
+  public Integer maxElements() {
+    return pageRequested.calculateMaxElements();
+  }
+
+  public Integer offset() {
+    return pageRequested.calculateSkippedElements();
   }
 
   public static class PetrolStationFilterBuilder {
