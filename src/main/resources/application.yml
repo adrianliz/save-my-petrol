@@ -6,6 +6,7 @@ spring:
     mongodb:
       uri: ${MONGO_DB_URI}
       database: ${MONGO_DATABASE}
+      auto-index-creation: true
 
 app:
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
