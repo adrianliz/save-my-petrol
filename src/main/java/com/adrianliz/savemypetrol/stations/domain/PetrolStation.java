@@ -3,6 +3,7 @@ package com.adrianliz.savemypetrol.stations.domain;
 import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class PetrolStation implements Serializable {
   private final PetrolStationId id;
@@ -42,5 +43,22 @@ public class PetrolStation implements Serializable {
       final LocationValueObject targetLocation, final Double maxMetersAround) {
 
     return location.isInBoundaryWith(targetLocation, maxMetersAround);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final PetrolStation that = (PetrolStation) o;
+    return id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 }

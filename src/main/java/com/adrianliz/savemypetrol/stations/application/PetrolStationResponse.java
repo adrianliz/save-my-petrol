@@ -1,7 +1,12 @@
 package com.adrianliz.savemypetrol.stations.application;
 
-import com.adrianliz.savemypetrol.stations.domain.*;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationName;
+import com.adrianliz.savemypetrol.stations.domain.PetrolStationProduct;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +38,23 @@ public class PetrolStationResponse {
         petrolStation.name(),
         petrolStation.location(),
         petrolStation.products());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final PetrolStationResponse that = (PetrolStationResponse) o;
+    return id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
   }
 
   @AllArgsConstructor
