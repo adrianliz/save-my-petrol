@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.common.domain;
 
 import java.io.Serializable;
+import java.util.Random;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,13 +9,34 @@ import lombok.Getter;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Getter
-public abstract class LocationValueObject implements Serializable {
+public class LocationValueObject implements Serializable {
 
   private final Double latitude;
   private final Double longitude;
 
-  // See: https://stackoverflow.com/a/16794680
-  private Double distanceTo(final LocationValueObject targetLocation) {
+  private static double pickRandomPointBetween(final double start, final double end) {
+    if (start == end) {
+      return start;
+    }
+
+    final Random randomGenerator = new Random();
+    final var deltaIncrement = end - start;
+    final var offsetFromStart = randomGenerator.nextFloat() * deltaIncrement;
+    return start + offsetFromStart;
+  }
+
+  public static LocationValueObject between(
+      final LocationValueObject sourceLocation, final LocationValueObject targetLocation) {
+
+    final var latitude = pickRandomPointBetween(sourceLocation.latitude, targetLocation.latitude);
+    final var longitude =
+        pickRandomPointBetween(sourceLocation.longitude, targetLocation.longitude);
+
+    return new LocationValueObject(latitude, longitude);
+  }
+
+  // See: https://stackoverflow.com/a/16794680 (in meters)
+  public Double distanceTo(final LocationValueObject targetLocation) {
     final int R = 6371; // Radius of the earth
 
     final double latDistance = Math.toRadians(targetLocation.latitude - latitude);

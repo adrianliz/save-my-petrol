@@ -12,6 +12,10 @@ public class PetrolStationLocation extends LocationValueObject {
     this.address = address;
   }
 
+  public PetrolStationLocation(final LocationValueObject location, final String address) {
+    this(location.getLatitude(), location.getLongitude(), address);
+  }
+
   public String address() {
     return address;
   }

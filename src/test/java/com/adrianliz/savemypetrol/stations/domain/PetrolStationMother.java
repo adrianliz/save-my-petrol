@@ -22,12 +22,24 @@ public final class PetrolStationMother {
         Collections.emptyList());
   }
 
+  public static PetrolStation randomWithLocation(final PetrolStationLocation location) {
+    return create(
+        PetrolStationIdMother.random(),
+        PetrolStationNameMother.random(),
+        location,
+        PetrolStationProductMother.randoms());
+  }
+
   public static PetrolStation random() {
     return create(
         PetrolStationIdMother.random(),
         PetrolStationNameMother.random(),
         PetrolStationLocationMother.random(),
         PetrolStationProductMother.randoms());
+  }
+
+  public static List<PetrolStation> randomsWithLocation(final PetrolStationLocation location) {
+    return ListMother.random(() -> randomWithLocation(location));
   }
 
   public static List<PetrolStation> randoms() {
