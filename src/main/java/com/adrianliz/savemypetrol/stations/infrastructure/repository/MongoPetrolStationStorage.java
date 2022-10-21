@@ -47,4 +47,8 @@ public class MongoPetrolStationStorage implements PetrolStationsRepository {
         .map(PetrolStationConverter::toEntity)
         .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
   }
+
+  Mono<PetrolStation> save(final PetrolStation petrolStation) {
+    return dataAccessor.save(petrolStation);
+  }
 }

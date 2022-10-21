@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.stations.domain;
 
+import com.adrianliz.savemypetrol.common.domain.ListMother;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,5 +20,17 @@ public final class PetrolStationMother {
         PetrolStationNameMother.random(),
         PetrolStationLocationMother.random(),
         Collections.emptyList());
+  }
+
+  public static PetrolStation random() {
+    return create(
+        PetrolStationIdMother.random(),
+        PetrolStationNameMother.random(),
+        PetrolStationLocationMother.random(),
+        PetrolStationProductMother.randoms());
+  }
+
+  public static List<PetrolStation> randoms() {
+    return ListMother.random(PetrolStationMother::random);
   }
 }
