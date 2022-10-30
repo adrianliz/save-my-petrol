@@ -22,10 +22,6 @@ public enum ProductType {
     return id;
   }
 
-  public String spanishName() {
-    return name;
-  }
-
   public static ProductType findById(final Integer id) {
     return Arrays.stream(ProductType.values())
         .filter(productType -> productType.id.equals(id))

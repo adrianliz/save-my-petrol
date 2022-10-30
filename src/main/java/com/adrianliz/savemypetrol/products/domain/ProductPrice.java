@@ -8,8 +8,15 @@ public class ProductPrice implements Serializable {
   private final Currency currency;
 
   public ProductPrice(final Long cents, final Currency currency) {
+    validate();
     this.cents = cents;
     this.currency = currency;
+  }
+
+  private void validate() {
+    if (cents == null || currency == null || cents < 0) {
+      throw new InvalidProductPrice();
+    }
   }
 
   public Long cents() {

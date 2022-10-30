@@ -2,17 +2,34 @@ package com.adrianliz.savemypetrol.common.domain;
 
 import java.io.Serializable;
 import java.util.Random;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-@AllArgsConstructor
-@EqualsAndHashCode
-@Getter
 public class LocationValueObject implements Serializable {
 
   private final Double latitude;
   private final Double longitude;
+
+  public LocationValueObject(final Double latitude, final Double longitude) {
+    validate();
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+
+  private void validate() {
+    if (!isValid()) {
+      throw new InvalidLocation();
+    }
+  }
+
+  private boolean isValid() {
+    return latitude != null
+        && longitude != null
+        && !latitude.isNaN()
+        && !longitude.isNaN()
+        && latitude.compareTo(-90.0) > 0
+        && latitude.compareTo(90.0) < 0
+        && longitude.compareTo(-180.0) > 0
+        && longitude.compareTo(180.0) < 0;
+  }
 
   private static double pickRandomPointBetween(final double start, final double end) {
     if (start == end) {
@@ -59,5 +76,13 @@ public class LocationValueObject implements Serializable {
       final LocationValueObject targetLocation, final Double maxMetersAround) {
 
     return distanceTo(targetLocation) <= maxMetersAround;
+  }
+
+  public Double getLatitude() {
+    return latitude;
+  }
+
+  public Double getLongitude() {
+    return longitude;
   }
 }

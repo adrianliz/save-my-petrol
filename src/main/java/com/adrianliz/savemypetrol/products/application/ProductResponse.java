@@ -14,6 +14,8 @@ public class ProductResponse {
 
   public static ProductResponse from(final Product product) {
     return new ProductResponse(
-        product.sellerPetrolStationId().getValue(), product.type().name(), product.price().cents());
+        product.sellerPetrolStationId().getPrimitive(),
+        product.type().name(),
+        product.price().cents());
   }
 }

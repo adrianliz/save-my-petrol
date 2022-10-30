@@ -15,8 +15,8 @@ Find the cheapest petrol stations in Spain.
 
 ## Improvements
 
-- Add unit and e2e testing []
-- Add validations []
+- Add useful testing [X]
+- Add validations [X]
 - Use query bus/command bus to decouple modules
   (e.g. currently ```PetrolStationRepository``` is being used in products module) []
 - Use visitor pattern to avoid exposing internal object structure 

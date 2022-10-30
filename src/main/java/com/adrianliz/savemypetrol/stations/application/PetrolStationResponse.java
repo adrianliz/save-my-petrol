@@ -25,8 +25,8 @@ public class PetrolStationResponse {
       final PetrolStationLocation location,
       final List<PetrolStationProduct> products) {
 
-    this.id = id.getValue();
-    this.name = name.getValue();
+    this.id = id.getPrimitive();
+    this.name = name.getPrimitive();
     this.location = PetrolStationLocationResponse.from(location);
     this.products =
         products.stream().map(PetrolStationProductResponse::from).collect(Collectors.toList());
