@@ -9,18 +9,18 @@ public class LocationValueObject implements Serializable {
   private final Double longitude;
 
   public LocationValueObject(final Double latitude, final Double longitude) {
-    validate();
+    validate(latitude, longitude);
     this.latitude = latitude;
     this.longitude = longitude;
   }
 
-  private void validate() {
-    if (!isValid()) {
+  private void validate(final Double latitude, final Double longitude) {
+    if (!isValid(latitude, longitude)) {
       throw new InvalidLocation();
     }
   }
 
-  private boolean isValid() {
+  private boolean isValid(final Double latitude, final Double longitude) {
     return latitude != null
         && longitude != null
         && !latitude.isNaN()

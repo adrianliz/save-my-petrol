@@ -9,15 +9,17 @@ import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationName;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationProduct;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
+
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 @AllArgsConstructor
 @NoArgsConstructor(force = true) // NOTE: Needed for Jackson
 @Getter
@@ -73,30 +75,45 @@ public class PetrolStationResponse {
     decimalFormatter.setDecimalFormatSymbols(symbols);
 
     final List<PetrolStationProduct> petrolStationProducts = new ArrayList<>();
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.REGULAR_95,
-            new ProductPrice(parsePrice(regular95Price, decimalFormatter), Currency.EUR)));
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.REGULAR_95_PREMIUM,
-            new ProductPrice(parsePrice(regular95PremiumPrice, decimalFormatter), Currency.EUR)));
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.REGULAR_98,
-            new ProductPrice(parsePrice(regular98Price, decimalFormatter), Currency.EUR)));
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.DIESEL_A,
-            new ProductPrice(parsePrice(dieselAPrice, decimalFormatter), Currency.EUR)));
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.DIESEL_A_PREMIUM,
-            new ProductPrice(parsePrice(dieselAPremiumPrice, decimalFormatter), Currency.EUR)));
-    petrolStationProducts.add(
-        new PetrolStationProduct(
-            ProductType.DIESEL_B,
-            new ProductPrice(parsePrice(dieselBPrice, decimalFormatter), Currency.EUR)));
+
+    final var regular95ParsedPrice = parsePrice(regular95Price, decimalFormatter);
+    if (regular95ParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.REGULAR_95, new ProductPrice(regular95ParsedPrice, Currency.EUR)));
+    }
+    final var regular95PremiumParsedPrice = parsePrice(regular95PremiumPrice, decimalFormatter);
+    if (regular95PremiumParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.REGULAR_95_PREMIUM,
+              new ProductPrice(regular95PremiumParsedPrice, Currency.EUR)));
+    }
+    final var regular98ParsedPrice = parsePrice(regular98Price, decimalFormatter);
+    if (regular98ParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.REGULAR_98, new ProductPrice(regular98ParsedPrice, Currency.EUR)));
+    }
+    final var dieselAParsedPrice = parsePrice(dieselAPrice, decimalFormatter);
+    if (dieselAParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.DIESEL_A, new ProductPrice(dieselAParsedPrice, Currency.EUR)));
+    }
+    final var dieselAPremiumParsedPrice = parsePrice(dieselAPremiumPrice, decimalFormatter);
+    if (dieselAPremiumParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.DIESEL_A_PREMIUM,
+              new ProductPrice(dieselAPremiumParsedPrice, Currency.EUR)));
+    }
+    final var dieselBParsedPrice = parsePrice(dieselBPrice, decimalFormatter);
+    if (dieselBParsedPrice != null) {
+      petrolStationProducts.add(
+          new PetrolStationProduct(
+              ProductType.DIESEL_B, new ProductPrice(dieselBParsedPrice, Currency.EUR)));
+    }
 
     return new PetrolStation(
         new PetrolStationId(id),
