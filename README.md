@@ -19,7 +19,7 @@ Find the cheapest petrol stations in Spain.
 - Add validations [X]
 - Use query bus/command bus to decouple modules
   (e.g. currently ```PetrolStationRepository``` is being used in products module) []
-- Use visitor pattern to avoid exposing internal object structure 
+- Use visitor pattern to avoid exposing internal object structure
   (see: [printers-instead-of-getters](https://www.yegor256.com/2016/04/05/printers-instead-of-getters.html)) []
 
 ## How to contribute
@@ -40,13 +40,16 @@ MONGO_DATABASE
 ```
 
 Execute:
+
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 You could also use docker to deploy it:
 
-Execute 
+Execute
+
 ```bash 
+cd mongo
 docker-compose --env-file .env.local up -d && mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```

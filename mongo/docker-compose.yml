@@ -24,13 +24,13 @@ services:
     depends_on:
       - mongodb
     environment:
-            - ME_CONFIG_MONGODB_SERVER=mongo
-            - ME_CONFIG_MONGODB_PORT=27017
-            - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
-            - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_ROOT_USER}
-            - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
-            - ME_CONFIG_BASICAUTH_USERNAME=root
-            - ME_CONFIG_BASICAUTH_PASSWORD=root
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_ROOT_USER}
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=root
+      - ME_CONFIG_BASICAUTH_PASSWORD=root
     networks:
       - save-my-petrol-backend
 

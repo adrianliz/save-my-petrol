@@ -9,7 +9,7 @@ public class PetrolStationLocation extends LocationValueObject {
       final Double latitude, final Double longitude, final String address) {
 
     super(latitude, longitude);
-    validate();
+    validate(address);
     this.address = address;
   }
 
@@ -17,8 +17,8 @@ public class PetrolStationLocation extends LocationValueObject {
     this(location.getLatitude(), location.getLongitude(), address);
   }
 
-  private void validate() {
-    if (address == null || address.isBlank() || address.length() > 100) {
+  private void validate(final String address) {
+    if (address == null || address.isBlank() || address.length() > 1000) {
       throw new InvalidPetrolStationLocation();
     }
   }
