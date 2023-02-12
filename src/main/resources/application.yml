@@ -1,3 +1,7 @@
+server:
+  address: 0.0.0.0
+  port: ${PORT}
+
 spring:
   codec:
     max-in-memory-size: 100MB
