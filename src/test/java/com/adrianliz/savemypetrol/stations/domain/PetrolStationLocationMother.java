@@ -27,4 +27,10 @@ public final class PetrolStationLocationMother {
 
     return new PetrolStationLocation(locationValueObject, AddressMother.random().fullAddress());
   }
+
+  public static PetrolStationLocation move(
+      final PetrolStationLocation sourceLocation, final Double distanceInMeters) {
+
+    return randomWithLocation(sourceLocation.move(distanceInMeters));
+  }
 }

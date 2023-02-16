@@ -49,6 +49,12 @@ public class MongoPetrolStationStorage implements PetrolStationsRepository {
   }
 
   Mono<PetrolStation> save(final PetrolStation petrolStation) {
-    return dataAccessor.save(petrolStation);
+    return dataAccessor
+        .save(PetrolStationConverter.toRecord(petrolStation))
+        .map(PetrolStationConverter::toEntity);
+  }
+
+  Mono<Void> clear() {
+    return dataAccessor.dropCollection(PetrolStationRecord.class);
   }
 }

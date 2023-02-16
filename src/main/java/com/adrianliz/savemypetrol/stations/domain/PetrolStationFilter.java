@@ -13,6 +13,7 @@ public class PetrolStationFilter {
       final Double maxMetersFromSource,
       final Page pageRequested) {
 
+    validate(sourceLocation, maxMetersFromSource, pageRequested);
     this.sourceLocation = sourceLocation;
     this.maxMetersFromSource = maxMetersFromSource;
     this.pageRequested = pageRequested;
@@ -40,6 +41,22 @@ public class PetrolStationFilter {
     return pageRequested.calculateSkippedElements();
   }
 
+  private void validate(
+      final LocationValueObject sourceLocation,
+      final Double maxMetersFromSource,
+      final Page pageRequested) {
+
+    if (sourceLocation == null || maxMetersFromSource == null || pageRequested == null) {
+      throw new InvalidPetrolStationFilter();
+    }
+    final double tenKmInMeters = 10000D;
+    final double oneHundredKmInMeters = 10000D;
+    if (Double.compare(maxMetersFromSource, tenKmInMeters) < 0
+        || Double.compare(maxMetersFromSource, oneHundredKmInMeters) > 1) {
+      throw new InvalidPetrolStationFilter();
+    }
+  }
+
   public static class PetrolStationFilterBuilder {
     private LocationValueObject sourceLocation;
     private Double maxMetersFromSource;
@@ -65,5 +82,18 @@ public class PetrolStationFilter {
     public PetrolStationFilter build() {
       return new PetrolStationFilter(sourceLocation, maxMetersFromSource, pageRequested);
     }
+  }
+
+  @Override
+  public String toString() {
+    return "PetrolStationFilter(sourceLocation="
+        + getSourceLatitude()
+        + ", "
+        + getSourceLongitude()
+        + ", maxMetersFromSource="
+        + maxMetersFromSource
+        + ", pageRequested="
+        + pageRequested
+        + ")";
   }
 }

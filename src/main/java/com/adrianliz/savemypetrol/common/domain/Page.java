@@ -31,4 +31,9 @@ public class Page {
   public Integer calculateMaxElements() {
     return maxElements;
   }
+
+  @Override
+  public String toString() {
+    return "Page [maxElements=" + maxElements + ", offset=" + offset + "]";
+  }
 }

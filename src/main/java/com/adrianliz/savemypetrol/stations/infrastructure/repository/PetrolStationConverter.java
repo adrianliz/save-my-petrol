@@ -18,7 +18,7 @@ public final class PetrolStationConverter {
     final var name = new PetrolStationName(record.getName());
     final var location =
         new PetrolStationLocation(
-            record.getLocation().getX(), record.getLocation().getY(), record.getAddress());
+            record.getLocation().getY(), record.getLocation().getX(), record.getAddress());
     final var products =
         record.getProducts().stream()
             .map(
@@ -38,7 +38,7 @@ public final class PetrolStationConverter {
 
     final var location = petrolStation.location();
     recordBuilder.address(location.address());
-    recordBuilder.location(new GeoJsonPoint(location.getLatitude(), location.getLongitude()));
+    recordBuilder.location(new GeoJsonPoint(location.getLongitude(), location.getLatitude()));
 
     recordBuilder.products(
         petrolStation.products().stream()

@@ -52,7 +52,7 @@ public class LocationValueObject implements Serializable {
     return new LocationValueObject(latitude, longitude);
   }
 
-  // See: https://stackoverflow.com/a/16794680 (in meters)
+  // SEE: https://stackoverflow.com/a/16794680 (in meters)
   public Double distanceTo(final LocationValueObject targetLocation) {
     final int R = 6371; // Radius of the earth
 
@@ -76,6 +76,15 @@ public class LocationValueObject implements Serializable {
       final LocationValueObject targetLocation, final Double maxMetersAround) {
 
     return distanceTo(targetLocation) <= maxMetersAround;
+  }
+
+  // SEE: https://gis.stackexchange.com/a/2964
+  // NOTE: This is not accurate, but it's good enough for our purposes
+  public LocationValueObject move(final Double distanceInMeters) {
+    final var latitude = this.latitude + (distanceInMeters / 111111);
+    final var longitude = this.longitude + (distanceInMeters / 111111) / Math.cos(latitude);
+
+    return new LocationValueObject(latitude, longitude);
   }
 
   public Double getLatitude() {
