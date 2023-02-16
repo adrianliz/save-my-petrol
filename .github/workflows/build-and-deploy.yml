@@ -25,14 +25,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build with Maven
+      - name: Run tests
         run: mvn verify
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: save-my-petrol.jar
-          path: target
 
   deploy-artifact:
     name: deploy-artifact
@@ -42,12 +36,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: save-my-petrol.jar
-          path: target
 
       - name: Deploy to railway
         uses: bervProject/railway-deploy@main
