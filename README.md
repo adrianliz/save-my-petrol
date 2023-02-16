@@ -28,16 +28,22 @@ Contributes are welcome!
 
 Make a PR resolving one feature/improvement or create new feature/improvement task
 
-## Deploy locally
+## Deploy in a DEV environment
 
 Define these environment variables:
 
 ```bash
+APP_ENV=dev
+APP_PORT
+
 MONGO_DB_PORT
 MONGO_ROOT_USER
 MONGO_ROOT_PASSWORD
 MONGO_DATABASE
+MONGO_EXPRESS_PORT
 ```
+
+### Without docker
 
 Execute:
 
@@ -45,11 +51,18 @@ Execute:
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-You could also use docker to deploy it:
+### With mongo in docker
 
-Execute
+Execute:
 
 ```bash 
-cd mongo
-docker-compose --env-file .env.local up -d && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+docker-compose --env-file ${env_file} up -d mongo && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+## With mongo and app in docker
+
+Execute:
+
+```bash
+docker-compose --env-file ${env_file} up -d
 ```

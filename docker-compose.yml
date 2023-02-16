@@ -1,8 +1,32 @@
 version: '3.9'
 
 services:
+  save-my-petrol:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - APP_ENV=${APP_ENV}:dev
+        - APP_PORT=${APP_PORT}:8080
+    container_name: save-my-petrol
+    restart: always
+    ports:
+      - ${APP_PORT}:8080
+    environment:
+      APP_ENV: ${APP_ENV}:dev
+      APP_PORT: ${APP_PORT}:8080
+      MONGO_DB_PORT: ${MONGO_DB_PORT}
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+    depends_on:
+      - mongodb
+    networks:
+      - save-my-petrol-backend
+
   mongodb:
-    image: mongo:6.0.2
+    # NOTE: Couldn't use the latest version of mongo in M2
+    image: mongo:4.4
     container_name: mongo
     ports:
       - ${MONGO_DB_PORT}:27017
