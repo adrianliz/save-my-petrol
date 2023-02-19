@@ -6,6 +6,7 @@ import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationsRepository;
 import com.adrianliz.savemypetrol.stations.infrastructure.repository.record.PetrolStationRecord;
 import com.hazelcast.map.IMap;
+import com.mongodb.client.result.DeleteResult;
 import java.util.Comparator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.geo.GeoResult;
@@ -54,7 +55,7 @@ public class MongoPetrolStationStorage implements PetrolStationsRepository {
         .map(PetrolStationConverter::toEntity);
   }
 
-  Mono<Void> clear() {
-    return dataAccessor.dropCollection(PetrolStationRecord.class);
+  Mono<Long> clear() {
+    return dataAccessor.remove(PetrolStationRecord.class).all().map(DeleteResult::getDeletedCount);
   }
 }

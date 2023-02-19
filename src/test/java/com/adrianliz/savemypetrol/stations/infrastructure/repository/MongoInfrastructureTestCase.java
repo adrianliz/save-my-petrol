@@ -8,6 +8,7 @@ import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocationMother;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationMother;
 import com.adrianliz.savemypetrol.stations.infrastructure.config.PetrolStationsCacheConfiguration;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,12 +21,17 @@ import reactor.core.publisher.Flux;
       MongoTestConfiguration.class,
       MongoPetrolStationStorage.class
     })
+@Slf4j
 public class MongoInfrastructureTestCase {
   @Autowired protected MongoPetrolStationStorage storage;
 
   @AfterEach
-  void setUp() {
-    storage.clear().block();
+  void tearDown() {
+    storage
+        .clear()
+        .doOnNext(
+            documentsDeleted -> log.info("{} documents deleted in tearDown", documentsDeleted))
+        .block();
   }
 
   protected Flux<PetrolStation> givenThereIsRandomPetrolStations() {
