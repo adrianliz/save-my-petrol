@@ -1,17 +1,15 @@
 package com.adrianliz.savemypetrol.stations.domain;
 
-import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
+import com.adrianliz.savemypetrol.common.domain.Location;
 import com.adrianliz.savemypetrol.common.domain.Page;
 
 public class PetrolStationFilter {
-  private final LocationValueObject sourceLocation;
+  private final Location sourceLocation;
   private final Double maxMetersFromSource;
   private final Page pageRequested;
 
   public PetrolStationFilter(
-      final LocationValueObject sourceLocation,
-      final Double maxMetersFromSource,
-      final Page pageRequested) {
+      final Location sourceLocation, final Double maxMetersFromSource, final Page pageRequested) {
 
     validate(sourceLocation, maxMetersFromSource, pageRequested);
     this.sourceLocation = sourceLocation;
@@ -20,11 +18,11 @@ public class PetrolStationFilter {
   }
 
   public Double getSourceLatitude() {
-    return sourceLocation.getLatitude();
+    return sourceLocation.latitude();
   }
 
   public Double getSourceLongitude() {
-    return sourceLocation.getLongitude();
+    return sourceLocation.longitude();
   }
 
   public Double getMaxKmFromSource() {
@@ -42,9 +40,7 @@ public class PetrolStationFilter {
   }
 
   private void validate(
-      final LocationValueObject sourceLocation,
-      final Double maxMetersFromSource,
-      final Page pageRequested) {
+      final Location sourceLocation, final Double maxMetersFromSource, final Page pageRequested) {
 
     if (sourceLocation == null || maxMetersFromSource == null || pageRequested == null) {
       throw new InvalidPetrolStationFilter();
@@ -58,13 +54,13 @@ public class PetrolStationFilter {
   }
 
   public static class PetrolStationFilterBuilder {
-    private LocationValueObject sourceLocation;
+    private Location sourceLocation;
     private Double maxMetersFromSource;
     private Page pageRequested;
 
     public PetrolStationFilterBuilder() {}
 
-    public PetrolStationFilterBuilder sourceLocation(final LocationValueObject sourceLocation) {
+    public PetrolStationFilterBuilder sourceLocation(final Location sourceLocation) {
       this.sourceLocation = sourceLocation;
       return this;
     }

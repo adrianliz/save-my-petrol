@@ -33,12 +33,12 @@ public final class PetrolStationConverter {
 
   public static PetrolStationRecord toRecord(final PetrolStation petrolStation) {
     final var recordBuilder = PetrolStationRecord.builder();
-    recordBuilder.id(petrolStation.id().getPrimitive());
+    recordBuilder.id(petrolStation.id().value());
     recordBuilder.name(petrolStation.name().getPrimitive());
 
     final var location = petrolStation.location();
     recordBuilder.address(location.address());
-    recordBuilder.location(new GeoJsonPoint(location.getLongitude(), location.getLatitude()));
+    recordBuilder.location(new GeoJsonPoint(location.longitude(), location.latitude()));
 
     recordBuilder.products(
         petrolStation.products().stream()

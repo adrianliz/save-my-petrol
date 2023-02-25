@@ -9,6 +9,8 @@ Find the cheapest petrol stations in Spain.
 - Find a petrol station by id [X]
 - Find petrol stations by simple filter [X]
 - Find products on petrol stations by simple filter [X]
+- Add subscription to a target product [X]
+- Generate notifications based on subscriptions []
 - Add authentication and authorization []
 - Add different sorting filters []
 - Find petrol stations in a route defined by two points []
@@ -56,7 +58,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 Execute:
 
 ```bash 
-docker-compose --env-file ${env_file} up -d mongo && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+docker-compose --env-file ${env_file} up -d mongodb && mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 ## With mongo and app in docker

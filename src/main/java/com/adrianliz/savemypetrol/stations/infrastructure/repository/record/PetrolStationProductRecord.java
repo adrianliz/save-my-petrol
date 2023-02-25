@@ -2,9 +2,7 @@ package com.adrianliz.savemypetrol.stations.infrastructure.repository.record;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 @Data
 @Builder
 public final class PetrolStationProductRecord {

@@ -1,7 +1,7 @@
 package com.adrianliz.savemypetrol.stations.infrastructure.repository;
 
 import com.adrianliz.savemypetrol.app.config.CacheConfiguration;
-import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
+import com.adrianliz.savemypetrol.common.domain.Location;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStation;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocation;
 import com.adrianliz.savemypetrol.stations.domain.PetrolStationLocationMother;
@@ -45,7 +45,7 @@ public class MongoInfrastructureTestCase {
     final var petrolStations =
         PetrolStationMother.randomsWithLocation(
             PetrolStationLocationMother.randomWithLocation(
-                LocationValueObject.between(sourceLocation, targetLocation)));
+                Location.between(sourceLocation, targetLocation)));
     return Flux.concat(petrolStations.stream().map(storage::save).collect(Collectors.toList()));
   }
 }

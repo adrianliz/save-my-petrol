@@ -3,12 +3,12 @@ package com.adrianliz.savemypetrol.common.domain;
 import java.io.Serializable;
 import java.util.Random;
 
-public class LocationValueObject implements Serializable {
+public class Location implements Serializable {
 
   private final Double latitude;
   private final Double longitude;
 
-  public LocationValueObject(final Double latitude, final Double longitude) {
+  public Location(final Double latitude, final Double longitude) {
     validate(latitude, longitude);
     this.latitude = latitude;
     this.longitude = longitude;
@@ -42,18 +42,17 @@ public class LocationValueObject implements Serializable {
     return start + offsetFromStart;
   }
 
-  public static LocationValueObject between(
-      final LocationValueObject sourceLocation, final LocationValueObject targetLocation) {
+  public static Location between(final Location sourceLocation, final Location targetLocation) {
 
     final var latitude = pickRandomPointBetween(sourceLocation.latitude, targetLocation.latitude);
     final var longitude =
         pickRandomPointBetween(sourceLocation.longitude, targetLocation.longitude);
 
-    return new LocationValueObject(latitude, longitude);
+    return new Location(latitude, longitude);
   }
 
   // SEE: https://stackoverflow.com/a/16794680 (in meters)
-  public Double distanceTo(final LocationValueObject targetLocation) {
+  public Double distanceTo(final Location targetLocation) {
     final int R = 6371; // Radius of the earth
 
     final double latDistance = Math.toRadians(targetLocation.latitude - latitude);
@@ -72,26 +71,20 @@ public class LocationValueObject implements Serializable {
     return Math.sqrt(distance);
   }
 
-  public boolean isInBoundaryWith(
-      final LocationValueObject targetLocation, final Double maxMetersAround) {
-
-    return distanceTo(targetLocation) <= maxMetersAround;
-  }
-
   // SEE: https://gis.stackexchange.com/a/2964
   // NOTE: This is not accurate, but it's good enough for our purposes
-  public LocationValueObject move(final Double distanceInMeters) {
+  public Location move(final Double distanceInMeters) {
     final var latitude = this.latitude + (distanceInMeters / 111111);
     final var longitude = this.longitude + (distanceInMeters / 111111) / Math.cos(latitude);
 
-    return new LocationValueObject(latitude, longitude);
+    return new Location(latitude, longitude);
   }
 
-  public Double getLatitude() {
+  public Double latitude() {
     return latitude;
   }
 
-  public Double getLongitude() {
+  public Double longitude() {
     return longitude;
   }
 }

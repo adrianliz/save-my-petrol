@@ -17,7 +17,7 @@ public class PetrolStationId extends Identifier {
     }
   }
 
-  public Long getPrimitive() {
+  public Long value() {
     return value;
   }
 

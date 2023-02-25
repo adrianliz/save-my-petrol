@@ -1,6 +1,5 @@
 package com.adrianliz.savemypetrol.stations.domain;
 
-import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -37,12 +36,6 @@ public class PetrolStation implements Serializable {
 
   public List<PetrolStationProduct> products() {
     return products;
-  }
-
-  public boolean isInBoundaryWith(
-      final LocationValueObject targetLocation, final Double maxMetersAround) {
-
-    return location.isInBoundaryWith(targetLocation, maxMetersAround);
   }
 
   @Override

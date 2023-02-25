@@ -19,6 +19,7 @@
     <properties>
         <java.version>17</java.version>
         <hazelcast-spring.version>5.1.3</hazelcast-spring.version>
+        <netty-macos.version>4.1.89.Final</netty-macos.version>
         <lombok.version>1.18.24</lombok.version>
 
         <!-- Test -->
@@ -51,6 +52,13 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
             <version>${hazelcast-spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <version>${netty-macos.version}</version>
+            <classifier>osx-aarch_64</classifier>
         </dependency>
 
         <!-- Provided -->

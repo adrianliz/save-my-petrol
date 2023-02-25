@@ -1,7 +1,7 @@
 package com.adrianliz.savemypetrol.stations.domain;
 
 import com.adrianliz.savemypetrol.common.domain.AddressMother;
-import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
+import com.adrianliz.savemypetrol.common.domain.Location;
 import com.github.javafaker.Address;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -22,10 +22,9 @@ public final class PetrolStationLocationMother {
     return create(AddressMother.random());
   }
 
-  public static PetrolStationLocation randomWithLocation(
-      final LocationValueObject locationValueObject) {
+  public static PetrolStationLocation randomWithLocation(final Location location) {
 
-    return new PetrolStationLocation(locationValueObject, AddressMother.random().fullAddress());
+    return new PetrolStationLocation(location, AddressMother.random().fullAddress());
   }
 
   public static PetrolStationLocation move(

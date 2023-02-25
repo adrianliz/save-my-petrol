@@ -25,7 +25,7 @@ public class PetrolStationResponse {
       final PetrolStationLocation location,
       final List<PetrolStationProduct> products) {
 
-    this.id = id.getPrimitive();
+    this.id = id.value();
     this.name = name.getPrimitive();
     this.location = PetrolStationLocationResponse.from(location);
     this.products =
@@ -68,8 +68,8 @@ public class PetrolStationResponse {
         final PetrolStationLocation petrolStationLocation) {
 
       return new PetrolStationLocationResponse(
-          petrolStationLocation.getLatitude(),
-          petrolStationLocation.getLongitude(),
+          petrolStationLocation.latitude(),
+          petrolStationLocation.longitude(),
           petrolStationLocation.address());
     }
   }

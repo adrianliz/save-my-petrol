@@ -1,8 +1,8 @@
 package com.adrianliz.savemypetrol.stations.domain;
 
-import com.adrianliz.savemypetrol.common.domain.LocationValueObject;
+import com.adrianliz.savemypetrol.common.domain.Location;
 
-public class PetrolStationLocation extends LocationValueObject {
+public class PetrolStationLocation extends Location {
   private final String address;
 
   public PetrolStationLocation(
@@ -13,8 +13,8 @@ public class PetrolStationLocation extends LocationValueObject {
     this.address = address;
   }
 
-  public PetrolStationLocation(final LocationValueObject location, final String address) {
-    this(location.getLatitude(), location.getLongitude(), address);
+  public PetrolStationLocation(final Location location, final String address) {
+    this(location.latitude(), location.longitude(), address);
   }
 
   private void validate(final String address) {

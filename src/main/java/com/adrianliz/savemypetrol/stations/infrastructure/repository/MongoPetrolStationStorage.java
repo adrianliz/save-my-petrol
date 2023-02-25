@@ -34,7 +34,7 @@ public class MongoPetrolStationStorage implements PetrolStationsRepository {
     return Mono.fromCompletionStage(() -> petrolStationsCache.getAsync(id))
         .switchIfEmpty(
             dataAccessor
-                .findById(id.getPrimitive(), PetrolStationRecord.class)
+                .findById(id.value(), PetrolStationRecord.class)
                 .map(PetrolStationConverter::toEntity))
         .doOnNext(petrolStation -> petrolStationsCache.setAsync(petrolStation.id(), petrolStation));
   }

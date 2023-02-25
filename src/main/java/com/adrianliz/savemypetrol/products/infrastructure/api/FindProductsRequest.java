@@ -6,12 +6,13 @@ import com.adrianliz.savemypetrol.stations.domain.PetrolStationId;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FindProductsRequest {
-  @NotNull @Valid private final List<@NotNull Long> targetPetrolStationsIds;
+  @NotEmpty @Valid private final List<@NotNull Long> targetPetrolStationsIds;
   @NotNull private final Integer targetProductTypeId;
 
   public ProductFilter buildFilter() {
