@@ -1,12 +1,17 @@
 package com.adrianliz.savemypetrol.common.domain;
 
-import lombok.AllArgsConstructor;
+import java.io.Serializable;
+import java.util.Objects;
 
-@AllArgsConstructor
-public class Page {
+public class Page implements Serializable {
   private final Integer maxElements;
 
   private final Integer offset;
+
+  private Page(final Integer maxElements, final Integer offset) {
+    this.maxElements = maxElements;
+    this.offset = offset;
+  }
 
   public static Page of(final Integer maxElements, final Integer offset) {
     final int validNumber =
@@ -20,16 +25,29 @@ public class Page {
     return of(null, null);
   }
 
-  public boolean hasMaxElements() {
-    return maxElements != 0;
-  }
-
   public Integer calculateSkippedElements() {
     return offset;
   }
 
   public Integer calculateMaxElements() {
     return maxElements;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final Page page = (Page) o;
+    return Objects.equals(maxElements, page.maxElements) && Objects.equals(offset, page.offset);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(maxElements, offset);
   }
 
   @Override

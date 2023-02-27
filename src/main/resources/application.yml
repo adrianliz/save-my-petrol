@@ -12,5 +12,12 @@ spring:
       database: ${MONGO_DATABASE}
       auto-index-creation: true
 
+logging:
+  level:
+    org:
+      mongodb:
+        driver:
+          connection: warn
+
 app:
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
