@@ -17,7 +17,9 @@ logging:
     org:
       mongodb:
         driver:
-          connection: warn
+          connection: info
 
 app:
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+  stripe:
+    apiKey: ${STRIPE_API_KEY}

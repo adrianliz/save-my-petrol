@@ -21,7 +21,7 @@ public class PetrolStationsWebClientConfiguration {
   private DataSize codecMaxInMemorySize;
 
   @Bean
-  public WebClient webClient() throws SSLException {
+  public WebClient petrolStationsClient() throws SSLException {
     final var sslContext =
         SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build();
 
