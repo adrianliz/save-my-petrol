@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class SubscriptionTargetProduct implements Serializable {
+
   private final ProductType type;
   private final SubscriptionTriggerProductPrice triggerPrice;
 

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class Match implements Serializable {
+
   private final SubscriptionId id;
   private final UserMatch user;
   private final PetrolStationMatch petrolStation;

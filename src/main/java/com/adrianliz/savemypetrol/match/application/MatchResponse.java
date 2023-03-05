@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public final class MatchResponse {
+
   private final String subscriptionId;
   private final Long userId;
   private final Long petrolStationId;
@@ -19,7 +20,7 @@ public final class MatchResponse {
     final PetrolStationProduct petrolStationProduct = petrolStationMatch.product();
 
     return new MatchResponse(
-        match.id().value(),
+        match.id().valueAsString(),
         match.user().id().value(),
         petrolStationMatch.id().value(),
         new TargetProductResponse(
@@ -29,6 +30,7 @@ public final class MatchResponse {
   @AllArgsConstructor
   @Getter
   private static final class TargetProductResponse {
+
     private final String type;
     private final Long price;
   }

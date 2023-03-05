@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 public class FindPetrolStationUseCaseShould extends PetrolStationsUnitTestCase {
+
   private FindPetrolStationUseCase findPetrolStationUseCase;
 
   @Override

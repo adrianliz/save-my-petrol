@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PetrolStationsCacheConfiguration {
+
   public static final String PETROL_STATIONS_CACHE = "petrolStationsCache";
 
   @Bean

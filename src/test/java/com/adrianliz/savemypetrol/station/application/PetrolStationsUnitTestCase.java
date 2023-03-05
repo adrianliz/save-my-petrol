@@ -6,6 +6,7 @@ import com.adrianliz.savemypetrol.station.domain.PetrolStationRepository;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class PetrolStationsUnitTestCase {
+
   protected PetrolStationRepository petrolStationRepository;
 
   @BeforeEach

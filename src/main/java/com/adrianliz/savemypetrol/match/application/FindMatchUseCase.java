@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public final class FindMatchUseCase {
+
   private final MatchRepository matchRepository;
 
   public Flux<MatchResponse> execute(final FindMatchesProcess process) {

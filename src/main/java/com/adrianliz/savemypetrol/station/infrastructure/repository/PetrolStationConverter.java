@@ -13,6 +13,7 @@ import com.adrianliz.savemypetrol.station.infrastructure.repository.record.Petro
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 public final class PetrolStationConverter {
+
   public static PetrolStation toEntity(final PetrolStationRecord record) {
     final var id = new PetrolStationId(record.getId());
     final var name = new PetrolStationName(record.getName());
@@ -34,7 +35,7 @@ public final class PetrolStationConverter {
   public static PetrolStationRecord toRecord(final PetrolStation petrolStation) {
     final var recordBuilder = PetrolStationRecord.builder();
     recordBuilder.id(petrolStation.id().value());
-    recordBuilder.name(petrolStation.name().getPrimitive());
+    recordBuilder.name(petrolStation.name().value());
 
     final var location = petrolStation.location();
     recordBuilder.address(location.address());

@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public class FindPetrolStationUseCase {
+
   private final PetrolStationRepository petrolStationRepository;
 
   public Mono<PetrolStationResponse> execute(

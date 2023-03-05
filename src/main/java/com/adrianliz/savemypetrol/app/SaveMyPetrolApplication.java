@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableReactiveMongoRepositories(basePackages = "com.adrianliz")
 @EnableScheduling
 public class SaveMyPetrolApplication {
+
   public static void main(final String[] args) {
     SpringApplication.run(SaveMyPetrolApplication.class, args);
   }

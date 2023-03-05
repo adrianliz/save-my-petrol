@@ -16,8 +16,4 @@ public enum Currency implements Serializable {
   public String symbolName() {
     return name;
   }
-
-  public String symbol() {
-    return symbol;
-  }
 }

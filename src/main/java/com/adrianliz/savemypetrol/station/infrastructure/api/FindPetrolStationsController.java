@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @AllArgsConstructor
 public class FindPetrolStationsController implements PetrolStationsControllerV1 {
+
   private final FindPetrolStationsUseCase findPetrolStationsUseCase;
 
   @GetMapping("/search")

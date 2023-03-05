@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public final class MatchRecord {
+
   private final String id;
   private final Long userId;
   private final ProductMatchRecord targetProduct;

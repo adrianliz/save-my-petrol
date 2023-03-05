@@ -2,23 +2,24 @@ package com.adrianliz.savemypetrol.match.domain;
 
 import com.adrianliz.savemypetrol.common.domain.UUIDIdentifier;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class FindMatchesProcessId extends UUIDIdentifier {
-  private final String value;
 
   public FindMatchesProcessId(final String value) {
-    validate(value);
-    this.value = value;
+    super(value);
   }
 
-  private void validate(final String value) {
-    if (!super.isValid(value)) {
+  @Override
+  protected UUID validate(final String value) {
+    if (value == null || value.isBlank()) {
       throw new InvalidFindMatchProcessId();
     }
-  }
-
-  public String value() {
-    return value;
+    try {
+      return UUID.fromString(value);
+    } catch (final IllegalArgumentException e) {
+      throw new InvalidFindMatchProcessId();
+    }
   }
 
   @Override

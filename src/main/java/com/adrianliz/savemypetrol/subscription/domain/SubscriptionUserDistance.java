@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class SubscriptionUserDistance implements Serializable {
+
   private final Long meters;
 
   public SubscriptionUserDistance(final Long meters) {

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MatchCacheConfiguration {
+
   public static final String MATCHES_CACHE = "matchesCache";
 
   @Bean

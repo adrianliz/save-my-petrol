@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ProductPrice implements Serializable {
+
   private final Long cents;
   private final Currency currency;
 

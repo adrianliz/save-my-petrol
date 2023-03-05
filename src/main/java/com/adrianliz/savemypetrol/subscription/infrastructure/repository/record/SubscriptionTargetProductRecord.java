@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public final class SubscriptionTargetProductRecord {
+
   private Integer typeId;
 
   private Long triggerCents;

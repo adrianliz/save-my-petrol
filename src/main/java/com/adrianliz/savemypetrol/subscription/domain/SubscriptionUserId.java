@@ -4,21 +4,16 @@ import com.adrianliz.savemypetrol.common.domain.IncrementalIdentifier;
 import java.util.Objects;
 
 public final class SubscriptionUserId extends IncrementalIdentifier {
-  private final Long value;
 
   public SubscriptionUserId(final Long value) {
-    validate(value);
-    this.value = value;
+    super(value);
   }
 
-  private void validate(final Long value) {
-    if (!super.isValid(value)) {
+  @Override
+  protected void validate(final Long value) {
+    if (value == null || value <= 0) {
       throw new InvalidSubscriptionUserId();
     }
-  }
-
-  public Long value() {
-    return value;
   }
 
   @Override

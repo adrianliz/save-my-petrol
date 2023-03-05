@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class Subscription implements Serializable {
+
   private final SubscriptionId id;
   private final SubscriptionUser user;
   private final SubscriptionTargetProduct targetProduct;

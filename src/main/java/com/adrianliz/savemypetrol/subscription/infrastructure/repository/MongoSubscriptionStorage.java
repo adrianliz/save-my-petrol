@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @Repository
 @AllArgsConstructor
 public class MongoSubscriptionStorage implements SubscriptionRepository {
+
   private final ReactiveMongoTemplate dataAccessor;
 
   @Override

@@ -26,7 +26,7 @@ public class PetrolStationResponse {
       final List<PetrolStationProduct> products) {
 
     this.id = id.value();
-    this.name = name.getPrimitive();
+    this.name = name.value();
     this.location = PetrolStationLocationResponse.from(location);
     this.products =
         products.stream().map(PetrolStationProductResponse::from).collect(Collectors.toList());
@@ -60,6 +60,7 @@ public class PetrolStationResponse {
   @AllArgsConstructor
   @Getter
   private static class PetrolStationLocationResponse {
+
     private final Double latitude;
     private final Double longitude;
     private final String address;
@@ -77,6 +78,7 @@ public class PetrolStationResponse {
   @AllArgsConstructor
   @Getter
   private static class PetrolStationProductResponse {
+
     private final String type;
     private final Long cents;
 

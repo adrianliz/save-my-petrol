@@ -11,6 +11,7 @@ import reactor.core.publisher.Flux;
 @Repository
 @AllArgsConstructor
 public class ProductProxyRepository implements ProductRepository {
+
   private final PetrolStationRepository petrolStationRepository;
 
   @Override

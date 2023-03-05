@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 @Repository
 @AllArgsConstructor
 public class MongoPetrolStationStorage implements PetrolStationRepository {
+
   private final ReactiveMongoTemplate dataAccessor;
   private final IMap<PetrolStationId, PetrolStation> petrolStationsCache;
 

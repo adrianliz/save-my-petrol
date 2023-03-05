@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public final class StripeService {
+
   public StripeService(@Value("${app.stripe.apiKey}") final String apiKey) {
     Stripe.apiKey = apiKey;
   }
@@ -31,7 +32,7 @@ public final class StripeService {
       return Optional.empty();
     }
   }
-  
+
   public void deactivatePaymentLink(final Session session) {
     try {
       PaymentLink.retrieve(session.getPaymentLink()).update(PaymentLinkUpdateParams.builder()

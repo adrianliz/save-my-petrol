@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public final class PetrolStationMother {
+
   public static PetrolStation create(
       final PetrolStationId id,
       final PetrolStationName name,

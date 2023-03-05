@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public final class CreateSubscriptionUseCase {
+
   private final SubscriptionRepository subscriptionRepository;
 
   public Mono<Void> execute(final Subscription subscription) {

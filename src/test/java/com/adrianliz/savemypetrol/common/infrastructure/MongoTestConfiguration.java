@@ -15,6 +15,7 @@ import org.testcontainers.containers.wait.strategy.Wait;
 
 @TestConfiguration
 public class MongoTestConfiguration extends AbstractReactiveMongoConfiguration {
+
   private static final MongoDBContainer mongoDbContainer =
       new MongoDBContainer("mongo:5.0.14").waitingFor(Wait.forListeningPort());
 

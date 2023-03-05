@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @AllArgsConstructor
 public final class FindMatchesController implements MatchesControllerV1 {
+
   private final FindMatchesUseCase findMatchesUseCase;
 
   @GetMapping

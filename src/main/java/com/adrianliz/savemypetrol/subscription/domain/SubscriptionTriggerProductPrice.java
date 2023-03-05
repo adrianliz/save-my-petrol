@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class SubscriptionTriggerProductPrice implements Serializable {
+
   private final Long cents;
 
   public SubscriptionTriggerProductPrice(final Long cents) {

@@ -3,7 +3,17 @@ package com.adrianliz.savemypetrol.common.domain;
 import java.io.Serializable;
 
 public abstract class StringValueObject implements Serializable {
-  protected boolean isValid(final String value) {
-    return value != null && !value.isBlank();
+
+  protected final String value;
+
+  protected StringValueObject(final String value) {
+    validate(value);
+    this.value = value;
+  }
+
+  protected abstract void validate(final String value);
+
+  public String value() {
+    return value;
   }
 }

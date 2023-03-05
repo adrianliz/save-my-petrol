@@ -9,20 +9,22 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUser;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.repository.record.PaymentRecord;
-import java.util.UUID;
 
 public final class PaymentConverter {
+
   public static PaymentRecord toRecord(final Payment payment) {
     return PaymentRecord.builder()
-        .id(UUID.fromString(payment.id().value()))
+        .id(payment.id().value())
         .userId(payment.user().id().value())
         .startDate(payment.subscription().startDate().value())
         .endDate(payment.subscription().endDate().value())
-        .cancelDate(payment.subscription().hasCancelDate() ? payment.subscription().cancelDate().value() : null)
+        .cancelDate(
+            payment.subscription().hasCancelDate() ? payment.subscription().cancelDate().value()
+                : null)
         .build();
   }
 
-  public static Payment toDomain(final PaymentRecord paymentRecord) {
+  public static Payment toEntity(final PaymentRecord paymentRecord) {
     final var cancelDate = paymentRecord.getCancelDate();
     final var paymentSubscription = new PaymentSubscription(
         new PaymentSubscriptionStartDate(paymentRecord.getStartDate()),
@@ -32,7 +34,8 @@ public final class PaymentConverter {
     return new Payment(
         new PaymentId(paymentRecord.getId().toString()),
         new PaymentUser(new PaymentUserId(paymentRecord.getUserId())),
-        cancelDate != null ? paymentSubscription.cancel(new PaymentSubscriptionCancelDate(paymentRecord.getCancelDate()))
+        cancelDate != null ? paymentSubscription.cancel(
+            new PaymentSubscriptionCancelDate(paymentRecord.getCancelDate()))
             : paymentSubscription);
   }
 }

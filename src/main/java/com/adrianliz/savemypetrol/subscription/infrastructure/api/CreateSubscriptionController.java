@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @AllArgsConstructor
 public final class CreateSubscriptionController implements SubscriptionsControllerV1 {
+
   private final CreateSubscriptionUseCase createSubscriptionUseCase;
 
   @PostMapping

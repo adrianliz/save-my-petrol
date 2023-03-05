@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public final class FindMatchesUseCase {
+
   private final MatchRepository matchRepository;
 
   public Mono<FindMatchesResponse> execute() {

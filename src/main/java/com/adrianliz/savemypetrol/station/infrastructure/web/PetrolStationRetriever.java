@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 @AllArgsConstructor
 @Slf4j
 public final class PetrolStationRetriever {
+
   private final WebClient petrolStationsClient;
   private final MongoDataAccessor dataAccessor;
 
@@ -26,7 +27,8 @@ public final class PetrolStationRetriever {
     return petrolStationsClient
         .get()
         .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<PetrolStationsResponse>() {})
+        .bodyToMono(new ParameterizedTypeReference<PetrolStationsResponse>() {
+        })
         .map(PetrolStationsResponse::getStations)
         .flatMapIterable(
             petrolStations ->

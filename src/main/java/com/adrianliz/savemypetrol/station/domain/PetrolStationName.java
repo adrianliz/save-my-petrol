@@ -4,21 +4,16 @@ import com.adrianliz.savemypetrol.common.domain.StringValueObject;
 import java.util.Objects;
 
 public final class PetrolStationName extends StringValueObject {
-  private final String value;
 
   public PetrolStationName(final String value) {
-    validate(value);
-    this.value = value;
+    super(value);
   }
 
-  private void validate(final String value) {
-    if (!super.isValid(value) || value.length() > 100) {
+  @Override
+  protected void validate(final String value) {
+    if (value == null || value.isBlank() || value.length() > 100) {
       throw new InvalidPetrolStationName();
     }
-  }
-
-  public String getPrimitive() {
-    return value;
   }
 
   @Override

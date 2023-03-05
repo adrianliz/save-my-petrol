@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class SubscriptionUser implements Serializable {
+
   private final SubscriptionUserId id;
   private final SubscriptionUserLocation sourceLocation;
   private final SubscriptionUserDistance maxDistanceFromSource;

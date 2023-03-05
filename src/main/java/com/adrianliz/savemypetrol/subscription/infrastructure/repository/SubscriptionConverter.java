@@ -5,16 +5,16 @@ import com.adrianliz.savemypetrol.subscription.domain.SubscriptionTargetProduct;
 import com.adrianliz.savemypetrol.subscription.domain.SubscriptionUser;
 import com.adrianliz.savemypetrol.subscription.infrastructure.repository.record.SubscriptionRecord;
 import com.adrianliz.savemypetrol.subscription.infrastructure.repository.record.SubscriptionTargetProductRecord;
-import java.util.UUID;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 
 public final class SubscriptionConverter {
+
   public static SubscriptionRecord toRecord(final Subscription subscription) {
     final SubscriptionUser user = subscription.user();
     final SubscriptionTargetProduct targetProduct = subscription.targetProduct();
 
     return SubscriptionRecord.builder()
-        .id(UUID.fromString(subscription.id().value()))
+        .id(subscription.id().value())
         .userId(user.id().value())
         .sourceLocation(
             new GeoJsonPoint(user.sourceLocation().longitude(), user.sourceLocation().latitude()))

@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class PetrolStation implements Serializable {
+
   private final PetrolStationId id;
   private final PetrolStationName name;
   private final PetrolStationLocation location;

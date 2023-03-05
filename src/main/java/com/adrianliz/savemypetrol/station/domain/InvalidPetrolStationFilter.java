@@ -1,3 +1,5 @@
 package com.adrianliz.savemypetrol.station.domain;
 
-public class InvalidPetrolStationFilter extends RuntimeException {}
+public class InvalidPetrolStationFilter extends RuntimeException {
+
+}

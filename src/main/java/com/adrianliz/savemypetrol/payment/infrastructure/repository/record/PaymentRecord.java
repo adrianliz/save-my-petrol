@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class PaymentRecord {
+
   @Id
   @EqualsAndHashCode.Include
   private UUID id;

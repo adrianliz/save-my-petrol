@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @AllArgsConstructor
 public class FindProductsController implements ProductsControllerV1 {
+
   private final FindProductsUseCase findProductsUseCase;
 
   @GetMapping("/search")

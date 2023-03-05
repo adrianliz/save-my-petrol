@@ -15,7 +15,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class SubscriptionRecord {
-  @Id @EqualsAndHashCode.Include private UUID id;
+
+  @Id
+  @EqualsAndHashCode.Include
+  private UUID id;
 
   private Long userId;
 

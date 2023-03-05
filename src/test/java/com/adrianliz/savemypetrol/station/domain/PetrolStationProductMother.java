@@ -7,6 +7,7 @@ import com.adrianliz.savemypetrol.product.domain.ProductType;
 import java.util.List;
 
 public final class PetrolStationProductMother {
+
   public static PetrolStationProduct create(final ProductType type, final ProductPrice price) {
     return new PetrolStationProduct(type, price);
   }

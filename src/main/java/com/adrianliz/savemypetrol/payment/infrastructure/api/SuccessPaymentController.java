@@ -11,7 +11,6 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUser;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.web.StripeService;
-import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
 import java.time.Duration;
 import java.time.Instant;
@@ -36,6 +35,7 @@ import reactor.util.retry.Retry;
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class SuccessPaymentController {
+
   private final RegisterPaymentUseCase registerPaymentUseCase;
   private final StripeService stripeService;
 
@@ -43,8 +43,11 @@ public final class SuccessPaymentController {
   private final Resource successPage;
 
   @GetMapping("/payments/success-page")
-  public Flux<DataBuffer> getSuccessPayment(@RequestParam(value = "session_id") final String sessionId) {
-    final var session = stripeService.getCheckoutSession(sessionId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+  public Flux<DataBuffer> getSuccessPayment(
+      @RequestParam(value = "session_id") final String sessionId) {
+
+    final var session = stripeService.getCheckoutSession(sessionId)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
     return Mono.just(buildPayment(session))
         .doOnSuccess(registerPaymentUseCase::execute)
@@ -55,11 +58,17 @@ public final class SuccessPaymentController {
   }
 
   private Payment buildPayment(final Session session) {
-    final Subscription subscription = stripeService.getSubscription(session.getSubscription()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    final var subscription = stripeService.getSubscription(session.getSubscription())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
     return new Payment(new PaymentId(UUID.randomUUID().toString()),
-        new PaymentUser(new PaymentUserId(Long.valueOf(session.getMetadata().get("telegram_user_id")))),
+        new PaymentUser(
+            new PaymentUserId(Long.valueOf(session.getMetadata().get("telegram_user_id")))),
         new PaymentSubscription(
-            new PaymentSubscriptionStartDate(LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getStartDate()), UTC)),
-            new PaymentSubscriptionEndDate(LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodEnd()), UTC))));
+            new PaymentSubscriptionStartDate(
+                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getStartDate()), UTC)),
+            new PaymentSubscriptionEndDate(
+                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodEnd()),
+                    UTC))));
   }
 }

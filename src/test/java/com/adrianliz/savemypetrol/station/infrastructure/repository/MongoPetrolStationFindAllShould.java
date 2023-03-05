@@ -13,8 +13,8 @@ public final class MongoPetrolStationFindAllShould extends MongoPetrolStationSto
     final var foundPetrolStations = storage.findAll();
 
     assertThat(
-            Objects.requireNonNull(expectedPetrolStations.collectList().block())
-                .containsAll(Objects.requireNonNull(foundPetrolStations.collectList().block())))
+        Objects.requireNonNull(expectedPetrolStations.collectList().block())
+            .containsAll(Objects.requireNonNull(foundPetrolStations.collectList().block())))
         .isTrue();
   }
 }

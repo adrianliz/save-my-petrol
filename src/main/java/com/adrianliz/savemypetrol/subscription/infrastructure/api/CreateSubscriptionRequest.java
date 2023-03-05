@@ -16,21 +16,22 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public final class CreateSubscriptionRequest {
-  @NotNull public final Long userId;
 
-  @NotNull private final Double sourceLatitude;
+  @NotNull
+  public final Long userId;
 
-  @NotNull private final Double sourceLongitude;
+  @NotNull
+  private final Double sourceLatitude;
 
-  @NotNull private final Long maxMetersFromSource;
+  @NotNull
+  private final Double sourceLongitude;
 
-  @NotNull @Valid private TargetProduct targetProduct;
+  @NotNull
+  private final Long maxMetersFromSource;
 
-  @AllArgsConstructor
-  private static final class TargetProduct {
-    @NotNull final Integer id;
-    @NotNull final Long triggerPrice;
-  }
+  @NotNull
+  @Valid
+  private TargetProduct targetProduct;
 
   public Subscription buildSubscription() {
     return new Subscription(
@@ -42,5 +43,14 @@ public final class CreateSubscriptionRequest {
         new SubscriptionTargetProduct(
             ProductType.findById(targetProduct.id),
             new SubscriptionTriggerProductPrice(targetProduct.triggerPrice)));
+  }
+
+  @AllArgsConstructor
+  private static final class TargetProduct {
+
+    @NotNull
+    final Integer id;
+    @NotNull
+    final Long triggerPrice;
   }
 }

@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public class FindPetrolStationsUseCase {
+
   private final PetrolStationRepository petrolStationRepository;
 
   public Flux<PetrolStationResponse> execute(

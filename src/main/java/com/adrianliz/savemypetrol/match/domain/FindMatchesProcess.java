@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class FindMatchesProcess implements Serializable {
+
   private final FindMatchesProcessId id;
 
   public FindMatchesProcess(final FindMatchesProcessId id) {

@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class PetrolStationProduct implements Serializable {
+
   private final ProductType type;
   private final ProductPrice price;
 

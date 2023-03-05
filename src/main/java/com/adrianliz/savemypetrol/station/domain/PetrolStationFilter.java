@@ -4,21 +4,19 @@ import com.adrianliz.savemypetrol.common.domain.Location;
 import com.adrianliz.savemypetrol.common.domain.Page;
 
 public class PetrolStationFilter {
-  private final Location sourceLocation;
+
+  private final PetrolStationLocation sourceLocation;
   private final Double maxMetersFromSource;
   private final Page pageRequested;
 
   public PetrolStationFilter(
-      final Location sourceLocation, final Double maxMetersFromSource, final Page pageRequested) {
+      final PetrolStationLocation sourceLocation, final Double maxMetersFromSource,
+      final Page pageRequested) {
 
     validate(sourceLocation, maxMetersFromSource, pageRequested);
     this.sourceLocation = sourceLocation;
     this.maxMetersFromSource = maxMetersFromSource;
     this.pageRequested = pageRequested;
-  }
-
-  public Double getSourceLatitude() {
-    return sourceLocation.latitude();
   }
 
   private void validate(
@@ -35,11 +33,15 @@ public class PetrolStationFilter {
     }
   }
 
-  public Double getSourceLongitude() {
+  public Double sourceLatitude() {
+    return sourceLocation.latitude();
+  }
+
+  public Double sourceLongitude() {
     return sourceLocation.longitude();
   }
 
-  public Double getMaxKmFromSource() {
+  public Double maxKmFromSource() {
     return (maxMetersFromSource != null && maxMetersFromSource > 0)
         ? maxMetersFromSource / 1000
         : 0;
@@ -53,14 +55,29 @@ public class PetrolStationFilter {
     return pageRequested.calculateSkippedElements();
   }
 
+  @Override
+  public String toString() {
+    return "PetrolStationFilter(sourceLocation="
+        + sourceLatitude()
+        + ", "
+        + sourceLongitude()
+        + ", maxMetersFromSource="
+        + maxMetersFromSource
+        + ", pageRequested="
+        + pageRequested
+        + ")";
+  }
+
   public static class PetrolStationFilterBuilder {
-    private Location sourceLocation;
+
+    private PetrolStationLocation sourceLocation;
     private Double maxMetersFromSource;
     private Page pageRequested;
 
-    public PetrolStationFilterBuilder() {}
+    public PetrolStationFilterBuilder() {
+    }
 
-    public PetrolStationFilterBuilder sourceLocation(final Location sourceLocation) {
+    public PetrolStationFilterBuilder sourceLocation(final PetrolStationLocation sourceLocation) {
       this.sourceLocation = sourceLocation;
       return this;
     }
@@ -78,18 +95,5 @@ public class PetrolStationFilter {
     public PetrolStationFilter build() {
       return new PetrolStationFilter(sourceLocation, maxMetersFromSource, pageRequested);
     }
-  }
-
-  @Override
-  public String toString() {
-    return "PetrolStationFilter(sourceLocation="
-        + getSourceLatitude()
-        + ", "
-        + getSourceLongitude()
-        + ", maxMetersFromSource="
-        + maxMetersFromSource
-        + ", pageRequested="
-        + pageRequested
-        + ")";
   }
 }

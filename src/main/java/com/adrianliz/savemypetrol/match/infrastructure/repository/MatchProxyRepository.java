@@ -29,6 +29,7 @@ import reactor.core.scheduler.Schedulers;
 @AllArgsConstructor
 @Slf4j
 public class MatchProxyRepository implements MatchRepository {
+
   private final ReactiveMongoTemplate dataAccessor;
   private final PetrolStationRepository petrolStationRepository;
   private final IMap<FindMatchesProcess, List<Match>> matchesCache;

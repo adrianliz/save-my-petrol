@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import reactor.core.publisher.Flux;
 
 public class ProductFilter {
+
   private static final Comparator<Product> PRODUCT_COMPARATOR =
       Comparator.nullsFirst(Product::compareTo);
 
@@ -41,10 +42,12 @@ public class ProductFilter {
   }
 
   public static class ProductFilterBuilder {
+
     private List<PetrolStationId> targetPetrolStationsIds;
     private ProductType targetProductType;
 
-    public ProductFilterBuilder() {}
+    public ProductFilterBuilder() {
+    }
 
     public ProductFilterBuilder targetPetrolStationsIds(
         final List<PetrolStationId> targetPetrolStationsIds) {

@@ -2,15 +2,12 @@ package com.adrianliz.savemypetrol.payment.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Date;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public final class PaymentSubscriptionEndDate extends Date {
+
   public PaymentSubscriptionEndDate(final LocalDateTime value) {
     super(value);
-  }
-
-  @Override
-  public LocalDateTime value() {
-    return value;
   }
 
   @Override
@@ -22,5 +19,22 @@ public final class PaymentSubscriptionEndDate extends Date {
 
   public boolean isAfter(final PaymentSubscriptionCancelDate cancelDate) {
     return value.isAfter(cancelDate.value());
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final PaymentSubscriptionEndDate date = (PaymentSubscriptionEndDate) o;
+    return Objects.equals(value, date.value);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(value);
   }
 }

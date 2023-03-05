@@ -1,24 +1,26 @@
 package com.adrianliz.savemypetrol.subscription.domain;
 
 import com.adrianliz.savemypetrol.common.domain.UUIDIdentifier;
+import com.adrianliz.savemypetrol.match.domain.InvalidFindMatchProcessId;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class SubscriptionId extends UUIDIdentifier {
-  private final String value;
 
   public SubscriptionId(final String value) {
-    validate(value);
-    this.value = value;
+    super(value);
   }
 
-  private void validate(final String value) {
-    if (!super.isValid(value)) {
-      throw new InvalidSubscriptionId();
+  @Override
+  protected UUID validate(final String value) {
+    if (value == null || value.isBlank()) {
+      throw new InvalidFindMatchProcessId();
     }
-  }
-
-  public String value() {
-    return value;
+    try {
+      return UUID.fromString(value);
+    } catch (final IllegalArgumentException e) {
+      throw new InvalidFindMatchProcessId();
+    }
   }
 
   @Override

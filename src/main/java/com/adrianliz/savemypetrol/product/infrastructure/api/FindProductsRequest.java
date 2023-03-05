@@ -12,8 +12,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class FindProductsRequest {
-  @NotEmpty @Valid private final List<@NotNull Long> targetPetrolStationsIds;
-  @NotNull private final Integer targetProductTypeId;
+
+  @NotEmpty
+  @Valid
+  private final List<@NotNull Long> targetPetrolStationsIds;
+  @NotNull
+  private final Integer targetProductTypeId;
 
   public ProductFilter buildFilter() {
     final var filter = new ProductFilter.ProductFilterBuilder();

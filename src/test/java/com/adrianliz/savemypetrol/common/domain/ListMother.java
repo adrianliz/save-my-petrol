@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public final class ListMother {
+
   public static <T> List<T> create(final Integer size, final Supplier<T> creator) {
     final var list = new ArrayList<T>();
 

@@ -7,9 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public final class FindMatchesResponse {
+
   private final String processId;
 
   public static FindMatchesResponse from(final FindMatchesProcess process) {
-    return new FindMatchesResponse(process.id().value());
+    return new FindMatchesResponse(process.id().valueAsString());
   }
 }

@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 @Service
 @AllArgsConstructor
 public class FindProductsUseCase {
+
   private final ProductRepository productRepository;
 
   public Flux<ProductResponse> execute(final ProductFilter filter) {

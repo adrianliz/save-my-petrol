@@ -1,19 +1,24 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public final class PaymentSubscription implements Serializable {
+
   private final PaymentSubscriptionStartDate startDate;
   private final PaymentSubscriptionEndDate endDate;
   private final PaymentSubscriptionCancelDate cancelDate;
 
-  private PaymentSubscription(final PaymentSubscriptionStartDate startDate, final PaymentSubscriptionEndDate endDate, final PaymentSubscriptionCancelDate cancelDate) {
+  private PaymentSubscription(final PaymentSubscriptionStartDate startDate,
+      final PaymentSubscriptionEndDate endDate,
+      final PaymentSubscriptionCancelDate cancelDate) {
     this.startDate = startDate;
     this.endDate = endDate;
     this.cancelDate = cancelDate;
   }
 
-  public PaymentSubscription(final PaymentSubscriptionStartDate startDate, final PaymentSubscriptionEndDate endDate) {
+  public PaymentSubscription(final PaymentSubscriptionStartDate startDate,
+      final PaymentSubscriptionEndDate endDate) {
     this.startDate = startDate;
     this.endDate = endDate;
     cancelDate = null;
@@ -42,10 +47,21 @@ public final class PaymentSubscription implements Serializable {
     return cancelDate;
   }
 
-  private void validate(
-      final PaymentSubscriptionStartDate startDate, final PaymentSubscriptionEndDate endDate) {
-    if (startDate == null || endDate == null || !startDate.isBefore(endDate)) {
-      throw new InvalidPaymentSubscription();
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
     }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    final PaymentSubscription that = (PaymentSubscription) o;
+    return Objects.equals(startDate, that.startDate) && Objects.equals(endDate,
+        that.endDate) && Objects.equals(cancelDate, that.cancelDate);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(startDate, endDate, cancelDate);
   }
 }

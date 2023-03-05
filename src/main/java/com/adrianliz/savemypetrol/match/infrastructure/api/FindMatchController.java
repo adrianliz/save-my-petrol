@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @AllArgsConstructor
 public final class FindMatchController implements MatchesControllerV1 {
+
   private final FindMatchUseCase findMatchUseCase;
 
   @GetMapping("/{id}")

@@ -13,7 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Builder
 public final class PetrolStationRecord {
-  @Id private long id;
+
+  @Id
+  private long id;
 
   private String name;
 

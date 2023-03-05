@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public abstract class Date implements Serializable {
+
   protected final LocalDateTime value;
 
   protected Date(final LocalDateTime value) {

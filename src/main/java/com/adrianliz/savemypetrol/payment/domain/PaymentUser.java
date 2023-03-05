@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class PaymentUser implements Serializable {
+
   private final PaymentUserId id;
 
   public PaymentUser(final PaymentUserId id) {

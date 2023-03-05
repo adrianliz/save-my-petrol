@@ -19,14 +19,14 @@ public enum ProductType implements Serializable {
     this.name = name;
   }
 
-  public Integer id() {
-    return id;
-  }
-
   public static ProductType findById(final Integer id) {
     return Arrays.stream(ProductType.values())
         .filter(productType -> productType.id.equals(id))
         .findFirst()
         .orElse(null);
+  }
+
+  public Integer id() {
+    return id;
   }
 }

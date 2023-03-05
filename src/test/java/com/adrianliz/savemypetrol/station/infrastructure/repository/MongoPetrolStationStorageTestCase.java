@@ -1,7 +1,6 @@
 package com.adrianliz.savemypetrol.station.infrastructure.repository;
 
 import com.adrianliz.savemypetrol.app.config.CacheConfiguration;
-import com.adrianliz.savemypetrol.common.domain.Location;
 import com.adrianliz.savemypetrol.common.infrastructure.MongoTestConfiguration;
 import com.adrianliz.savemypetrol.station.domain.PetrolStation;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationLocation;
@@ -17,14 +16,16 @@ import reactor.core.publisher.Flux;
 
 @SpringBootTest(
     classes = {
-      CacheConfiguration.class,
-      PetrolStationsCacheConfiguration.class,
-      MongoTestConfiguration.class,
-      MongoPetrolStationStorage.class
+        CacheConfiguration.class,
+        PetrolStationsCacheConfiguration.class,
+        MongoTestConfiguration.class,
+        MongoPetrolStationStorage.class
     })
 @Slf4j
 public class MongoPetrolStationStorageTestCase {
-  @Autowired protected MongoPetrolStationStorage storage;
+
+  @Autowired
+  protected MongoPetrolStationStorage storage;
 
   @AfterEach
   void tearDown() {
@@ -46,7 +47,7 @@ public class MongoPetrolStationStorageTestCase {
     final var petrolStations =
         PetrolStationMother.randomsWithLocation(
             PetrolStationLocationMother.randomWithLocation(
-                Location.between(sourceLocation, targetLocation)));
+                PetrolStationLocation.between(sourceLocation, targetLocation)));
     return Flux.concat(petrolStations.stream().map(storage::save).collect(Collectors.toList()));
   }
 }

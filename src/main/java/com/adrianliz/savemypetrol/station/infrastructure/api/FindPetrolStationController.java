@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @AllArgsConstructor
 public class FindPetrolStationController implements PetrolStationsControllerV1 {
+
   private final FindPetrolStationUseCase findPetrolStationUseCase;
 
   @GetMapping("/{id}")

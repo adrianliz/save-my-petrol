@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 @Repository
 @AllArgsConstructor
 public class MongoPaymentStorage implements PaymentRepository {
+
   private final ReactiveMongoTemplate dataAccessor;
 
   @Override
@@ -33,6 +34,6 @@ public class MongoPaymentStorage implements PaymentRepository {
                     .and("startDate").lt(now)),
             PaymentRecord.class)
         .next()
-        .map(PaymentConverter::toDomain);
+        .map(PaymentConverter::toEntity);
   }
 }

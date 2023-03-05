@@ -7,10 +7,11 @@ import org.springframework.data.mongodb.core.query.NearQuery;
 
 @Slf4j
 public final class MongoPetrolStationFilter {
+
   public static NearQuery from(final PetrolStationFilter filter) {
     log.info("Filtering by: {}", filter);
-    return NearQuery.near(filter.getSourceLongitude(), filter.getSourceLatitude())
-        .maxDistance(filter.getMaxKmFromSource(), Metrics.KILOMETERS)
+    return NearQuery.near(filter.sourceLongitude(), filter.sourceLatitude())
+        .maxDistance(filter.maxKmFromSource(), Metrics.KILOMETERS)
         .spherical(true)
         .skip(filter.offset())
         .limit(filter.maxElements());

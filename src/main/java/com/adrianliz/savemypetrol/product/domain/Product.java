@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class Product implements Comparable<Product>, Serializable {
+
   private final PetrolStationId sellerPetrolStationId;
   private final ProductType type;
   private final ProductPrice price;

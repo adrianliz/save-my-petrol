@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 @Service
 @AllArgsConstructor
 public class RegisterPaymentUseCase {
+
   private final PaymentRepository paymentRepository;
 
   public Mono<Void> execute(final Payment payment) {

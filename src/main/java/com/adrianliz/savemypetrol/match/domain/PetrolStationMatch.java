@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public final class PetrolStationMatch implements Serializable {
+
   private final PetrolStationId id;
   private final PetrolStationProduct product;
 

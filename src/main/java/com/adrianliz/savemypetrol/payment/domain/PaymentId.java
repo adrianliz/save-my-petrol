@@ -1,25 +1,28 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
 import com.adrianliz.savemypetrol.common.domain.UUIDIdentifier;
+import com.adrianliz.savemypetrol.match.domain.InvalidFindMatchProcessId;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class PaymentId extends UUIDIdentifier {
-  private final String value;
 
   public PaymentId(final String value) {
-    validate(value);
-    this.value = value;
+    super(value);
   }
 
-  private void validate(final String value) {
-    if (!super.isValid(value)) {
-      throw new InvalidPaymentId();
+  @Override
+  protected UUID validate(final String value) {
+    if (value == null || value.isBlank()) {
+      throw new InvalidFindMatchProcessId();
+    }
+    try {
+      return UUID.fromString(value);
+    } catch (final IllegalArgumentException e) {
+      throw new InvalidFindMatchProcessId();
     }
   }
 
-  public String value() {
-    return value;
-  }
 
   @Override
   public boolean equals(final Object o) {

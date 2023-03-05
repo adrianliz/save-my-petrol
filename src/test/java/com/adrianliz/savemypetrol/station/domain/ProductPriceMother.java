@@ -6,6 +6,7 @@ import com.adrianliz.savemypetrol.common.domain.RandomElementPicker;
 import com.adrianliz.savemypetrol.product.domain.ProductPrice;
 
 public final class ProductPriceMother {
+
   public static ProductPrice create(final Long cents, final Currency currency) {
     return new ProductPrice(cents, currency);
   }

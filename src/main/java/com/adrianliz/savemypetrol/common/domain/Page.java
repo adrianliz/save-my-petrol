@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Page implements Serializable {
+
   private final Integer maxElements;
 
   private final Integer offset;
