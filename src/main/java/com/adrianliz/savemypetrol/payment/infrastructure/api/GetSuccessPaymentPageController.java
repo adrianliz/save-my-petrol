@@ -10,7 +10,7 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionEndDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUser;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
-import com.adrianliz.savemypetrol.payment.infrastructure.web.StripeService;
+import com.adrianliz.savemypetrol.payment.infrastructure.stripe.StripeService;
 import com.stripe.model.checkout.Session;
 import java.time.Duration;
 import java.time.Instant;
@@ -29,12 +29,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public final class SuccessPaymentController {
+public final class GetSuccessPaymentPageController implements PaymentsControllerV1 {
 
   private final RegisterPaymentUseCase registerPaymentUseCase;
   private final StripeService stripeService;
@@ -42,19 +41,17 @@ public final class SuccessPaymentController {
   @Value("classpath:success-page.html")
   private final Resource successPage;
 
-  @GetMapping("/payments/success-page")
-  public Flux<DataBuffer> getSuccessPayment(
+  @GetMapping("/success-page")
+  public Flux<DataBuffer> getSuccessPaymentPage(
       @RequestParam(value = "session_id") final String sessionId) {
 
     final var session = stripeService.getCheckoutSession(sessionId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    return Mono.just(buildPayment(session))
-        .doOnSuccess(registerPaymentUseCase::execute)
+    return registerPaymentUseCase.execute(buildPayment(session))
         .doOnSuccess(payment -> stripeService.deactivatePaymentLink(session))
         .retryWhen(Retry.backoff(10, Duration.ofSeconds(1)))
         .thenMany(DataBufferUtils.read(successPage, new DefaultDataBufferFactory(), 4096));
-
   }
 
   private Payment buildPayment(final Session session) {
@@ -66,7 +63,8 @@ public final class SuccessPaymentController {
             new PaymentUserId(Long.valueOf(session.getMetadata().get("telegram_user_id")))),
         new PaymentSubscription(
             new PaymentSubscriptionStartDate(
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getStartDate()), UTC)),
+                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodStart()),
+                    UTC)),
             new PaymentSubscriptionEndDate(
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodEnd()),
                     UTC))));

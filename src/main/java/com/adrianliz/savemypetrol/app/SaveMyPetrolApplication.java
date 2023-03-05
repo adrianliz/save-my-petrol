@@ -1,5 +1,8 @@
 package com.adrianliz.savemypetrol.app;
 
+import static java.time.ZoneOffset.UTC;
+
+import java.util.TimeZone;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,5 +17,6 @@ public class SaveMyPetrolApplication {
 
   public static void main(final String[] args) {
     SpringApplication.run(SaveMyPetrolApplication.class, args);
+    TimeZone.setDefault(TimeZone.getTimeZone(UTC));
   }
 }

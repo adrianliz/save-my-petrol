@@ -1,5 +1,7 @@
 package com.adrianliz.savemypetrol.payment.infrastructure.repository;
 
+import static java.time.ZoneOffset.UTC;
+
 import com.adrianliz.savemypetrol.payment.domain.Payment;
 import com.adrianliz.savemypetrol.payment.domain.PaymentRepository;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
@@ -25,13 +27,13 @@ public class MongoPaymentStorage implements PaymentRepository {
 
   @Override
   public Mono<Payment> findActivePayment(final PaymentUserId paymentUserId) {
-    final LocalDateTime now = LocalDateTime.now();
+    final Long now = LocalDateTime.now().atZone(UTC).toEpochSecond();
     return dataAccessor.find(
             Query.query(
                 Criteria.where("userId").is(paymentUserId.value())
-                    .and("cancelDate").is(null)
-                    .and("endDate").gt(now)
-                    .and("startDate").lt(now)),
+                    .and("cancelTimestamp").exists(false)
+                    .and("endTimestamp").gt(now)
+                    .and("startTimestamp").lt(now)),
             PaymentRecord.class)
         .next()
         .map(PaymentConverter::toEntity);

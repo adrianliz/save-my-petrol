@@ -14,7 +14,7 @@ public class RegisterPaymentUseCase {
 
   public Mono<Void> execute(final Payment payment) {
     return paymentRepository.findActivePayment(payment.user().id())
-        .mapNotNull(p -> (Void) null)
-        .switchIfEmpty(Mono.defer(() -> paymentRepository.save(payment)));
+        .switchIfEmpty(Mono.defer(() -> paymentRepository.save(payment).map(v -> payment)))
+        .then();
   }
 }

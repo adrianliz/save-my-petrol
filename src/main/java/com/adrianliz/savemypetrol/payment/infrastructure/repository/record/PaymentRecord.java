@@ -1,6 +1,5 @@
 package com.adrianliz.savemypetrol.payment.infrastructure.repository.record;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,7 @@ public final class PaymentRecord {
   private UUID id;
 
   private Long userId;
-  private LocalDateTime startDate;
-  private LocalDateTime endDate;
-  private LocalDateTime cancelDate;
+  private Long startTimestamp;
+  private Long endTimestamp;
+  private Long cancelTimestamp;
 }

@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 public final class CreateSubscriptionRequest {
 
   @NotNull
-  public final Long userId;
+  private final Long userId;
 
   @NotNull
   private final Double sourceLatitude;

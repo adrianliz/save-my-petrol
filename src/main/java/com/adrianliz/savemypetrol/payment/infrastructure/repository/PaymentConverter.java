@@ -1,5 +1,7 @@
 package com.adrianliz.savemypetrol.payment.infrastructure.repository;
 
+import static java.time.ZoneOffset.UTC;
+
 import com.adrianliz.savemypetrol.payment.domain.Payment;
 import com.adrianliz.savemypetrol.payment.domain.PaymentId;
 import com.adrianliz.savemypetrol.payment.domain.PaymentSubscription;
@@ -9,6 +11,7 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUser;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.repository.record.PaymentRecord;
+import java.time.LocalDateTime;
 
 public final class PaymentConverter {
 
@@ -16,26 +19,30 @@ public final class PaymentConverter {
     return PaymentRecord.builder()
         .id(payment.id().value())
         .userId(payment.user().id().value())
-        .startDate(payment.subscription().startDate().value())
-        .endDate(payment.subscription().endDate().value())
-        .cancelDate(
-            payment.subscription().hasCancelDate() ? payment.subscription().cancelDate().value()
+        .startTimestamp(payment.subscription().startDate().value().atZone(UTC).toEpochSecond())
+        .endTimestamp(payment.subscription().endDate().value().atZone(UTC).toEpochSecond())
+        .cancelTimestamp(
+            payment.subscription().hasCancelDate()
+                ? payment.subscription().cancelDate().value().atZone(UTC).toEpochSecond()
                 : null)
         .build();
   }
 
   public static Payment toEntity(final PaymentRecord paymentRecord) {
-    final var cancelDate = paymentRecord.getCancelDate();
+    final var cancelTimestamp = paymentRecord.getCancelTimestamp();
     final var paymentSubscription = new PaymentSubscription(
-        new PaymentSubscriptionStartDate(paymentRecord.getStartDate()),
-        new PaymentSubscriptionEndDate(paymentRecord.getEndDate())
+        new PaymentSubscriptionStartDate(
+            LocalDateTime.ofEpochSecond(paymentRecord.getStartTimestamp(), 0, UTC)),
+        new PaymentSubscriptionEndDate(
+            LocalDateTime.ofEpochSecond(paymentRecord.getEndTimestamp(), 0, UTC))
     );
 
     return new Payment(
         new PaymentId(paymentRecord.getId().toString()),
         new PaymentUser(new PaymentUserId(paymentRecord.getUserId())),
-        cancelDate != null ? paymentSubscription.cancel(
-            new PaymentSubscriptionCancelDate(paymentRecord.getCancelDate()))
+        cancelTimestamp != null ? paymentSubscription.cancel(
+            new PaymentSubscriptionCancelDate(
+                LocalDateTime.ofEpochSecond(cancelTimestamp, 0, UTC)))
             : paymentSubscription);
   }
 }

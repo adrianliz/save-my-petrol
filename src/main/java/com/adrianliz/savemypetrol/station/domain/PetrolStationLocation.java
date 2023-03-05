@@ -52,7 +52,7 @@ public class PetrolStationLocation extends Location {
   }
 
   protected void validate(final String address) {
-    if (address == null || address.isBlank() || address.length() > 100) {
+    if (address == null || address.isBlank() || address.length() > 1000) {
       throw new InvalidPetrolStationLocation();
     }
   }
