@@ -2,9 +2,10 @@ package com.adrianliz.savemypetrol.payment.infrastructure.api;
 
 import static java.time.ZoneOffset.UTC;
 
-import com.adrianliz.savemypetrol.payment.application.FindPaymentUseCase;
+import com.adrianliz.savemypetrol.payment.application.FindActivePaymentService;
 import com.adrianliz.savemypetrol.payment.application.UpdatePaymentUseCase;
 import com.adrianliz.savemypetrol.payment.domain.PaymentSubscription;
+import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionCancelDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionEndDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
@@ -30,7 +31,7 @@ public final class StripeWebhook {
   @Value("${app.stripe.webhookSecret}")
   private final String webhookSecret;
 
-  private final FindPaymentUseCase findPaymentUseCase;
+  private final FindActivePaymentService findActivePaymentService;
   private final UpdatePaymentUseCase updatePaymentUseCase;
 
   @PostMapping("/stripe/webhook")
@@ -43,7 +44,7 @@ public final class StripeWebhook {
       final var eventBody = event.getDataObjectDeserializer().getObject().orElseThrow();
 
       switch (event.getType()) {
-        case "invoice.created":
+        case "invoice.paid" -> {
           final var invoice = (Invoice) eventBody;
           if (!"subscription_cycle".equals(invoice.getBillingReason())) {
             break;
@@ -53,7 +54,6 @@ public final class StripeWebhook {
               Long.valueOf(Customer.retrieve(newSubscription.getCustomer())
                   .getMetadata()
                   .get("telegram_user_id"));
-
           final var paymentSubscription =
               new PaymentSubscription(
                   new PaymentSubscriptionStartDate(
@@ -64,13 +64,31 @@ public final class StripeWebhook {
                       LocalDateTime.ofInstant(
                           Instant.ofEpochSecond(newSubscription.getCurrentPeriodEnd()),
                           UTC)));
-
-          return findPaymentUseCase.execute(new PaymentUserId(userId))
+          return findActivePaymentService.execute(new PaymentUserId(userId))
               .flatMap(payment -> updatePaymentUseCase.execute(
-                  payment.withSubscription(paymentSubscription)))
-              .map(unused -> "Success");
+                  payment.replaceSubscription(paymentSubscription)))
+              .map(unused -> "Success.");
+        }
+        case "customer.subscription.deleted" -> {
+          final var subscription = (Subscription) eventBody;
+          final var userIdToDelete =
+              Long.valueOf(Customer.retrieve(subscription.getCustomer())
+                  .getMetadata()
+                  .get("telegram_user_id"));
+          final var cancelDate = new PaymentSubscriptionCancelDate(
+              LocalDateTime.ofInstant(
+                  Instant.ofEpochSecond(subscription.getCanceledAt()),
+                  UTC));
+          return findActivePaymentService.execute(new PaymentUserId(userIdToDelete))
+              .flatMap(
+                  payment -> updatePaymentUseCase.execute(payment.cancelSubscription(cancelDate)))
+              .map(unused -> "Success.");
+        }
+        default -> {
+          return Mono.just("None action executed.");
+        }
       }
-      return Mono.just("Success");
+      return Mono.just("None action executed.");
     } catch (final StripeException ex) {
       return Mono.error(ex);
     }

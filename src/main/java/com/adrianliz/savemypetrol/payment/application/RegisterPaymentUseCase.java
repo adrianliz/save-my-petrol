@@ -11,10 +11,10 @@ import reactor.core.publisher.Mono;
 public class RegisterPaymentUseCase {
 
   private final PaymentRepository paymentRepository;
-  private final FindPaymentUseCase findPaymentUseCase;
+  private final FindActivePaymentService findActivePaymentService;
 
   public Mono<Void> execute(final Payment payment) {
-    return findPaymentUseCase.execute(payment.user().id())
+    return findActivePaymentService.execute(payment.user().id())
         .switchIfEmpty(Mono.defer(() -> paymentRepository.save(payment).map(unused -> payment)))
         .then();
   }

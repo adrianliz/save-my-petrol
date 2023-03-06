@@ -14,6 +14,10 @@ public abstract class Date implements Serializable {
 
   protected abstract void validate(final LocalDateTime value);
 
+  public boolean isAfter(final Date date) {
+    return value.isAfter(date.value);
+  }
+
   public LocalDateTime value() {
     return value;
   }

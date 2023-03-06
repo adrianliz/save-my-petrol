@@ -28,12 +28,12 @@ public final class PaymentSubscription implements Serializable {
     return cancelDate != null;
   }
 
-  public boolean isAfter(final PaymentSubscription paymentSubscription) {
-    return startDate.isAfter(paymentSubscription.endDate);
+  public boolean createdAfter(final PaymentSubscription paymentSubscription) {
+    return !isCancelled() && startDate.isAfter(paymentSubscription.endDate);
   }
 
   public PaymentSubscription cancel(final PaymentSubscriptionCancelDate cancelDate) {
-    if (isCancelled() || cancelDate == null || endDate.isAfter(cancelDate)) {
+    if (isCancelled() || cancelDate == null || startDate.isAfter(cancelDate)) {
       throw new InvalidPaymentSubscriptionCancelDate();
     }
     return new PaymentSubscription(startDate, endDate, cancelDate);

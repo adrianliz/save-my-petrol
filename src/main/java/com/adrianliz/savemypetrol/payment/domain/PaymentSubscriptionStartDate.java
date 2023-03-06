@@ -17,10 +17,6 @@ public final class PaymentSubscriptionStartDate extends Date {
     }
   }
 
-  public boolean isAfter(final PaymentSubscriptionEndDate endDate) {
-    return value.isAfter(endDate.value());
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (this == o) {

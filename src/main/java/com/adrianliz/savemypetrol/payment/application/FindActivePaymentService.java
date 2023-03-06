@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
-public final class FindPaymentUseCase {
+public final class FindActivePaymentService {
 
   private final PaymentRepository paymentRepository;
 

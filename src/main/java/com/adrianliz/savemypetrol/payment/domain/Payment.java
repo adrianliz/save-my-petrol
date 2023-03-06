@@ -18,11 +18,15 @@ public final class Payment implements Serializable {
     this.subscription = subscription;
   }
 
-  public Payment withSubscription(final PaymentSubscription subscription) {
-    if (this.subscription.isCancelled() || !subscription.isAfter(this.subscription)) {
+  public Payment replaceSubscription(final PaymentSubscription subscription) {
+    if (!subscription.createdAfter(this.subscription)) {
       throw new InvalidPaymentSubscription();
     }
     return new Payment(id, user, subscription);
+  }
+
+  public Payment cancelSubscription(final PaymentSubscriptionCancelDate cancelDate) {
+    return new Payment(id, user, subscription.cancel(cancelDate));
   }
 
   public PaymentId id() {
