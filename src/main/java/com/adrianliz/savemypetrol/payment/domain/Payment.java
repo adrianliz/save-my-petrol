@@ -9,11 +9,20 @@ public final class Payment implements Serializable {
   private final PaymentUser user;
   private final PaymentSubscription subscription;
 
-  public Payment(final PaymentId id, final PaymentUser user,
+  public Payment(
+      final PaymentId id,
+      final PaymentUser user,
       final PaymentSubscription subscription) {
     this.id = id;
     this.user = user;
     this.subscription = subscription;
+  }
+
+  public Payment withSubscription(final PaymentSubscription subscription) {
+    if (this.subscription.isCancelled() || !subscription.isAfter(this.subscription)) {
+      throw new InvalidPaymentSubscription();
+    }
+    return new Payment(id, user, subscription);
   }
 
   public PaymentId id() {

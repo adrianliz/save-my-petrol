@@ -8,14 +8,13 @@ import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
-public class RegisterPaymentUseCase {
+public final class UpdatePaymentUseCase {
 
   private final PaymentRepository paymentRepository;
   private final FindPaymentUseCase findPaymentUseCase;
 
-  public Mono<Void> execute(final Payment payment) {
-    return findPaymentUseCase.execute(payment.user().id())
-        .switchIfEmpty(Mono.defer(() -> paymentRepository.save(payment).map(unused -> payment)))
-        .then();
+  public Mono<Void> execute(final Payment newPayment) {
+    return findPaymentUseCase.execute(newPayment.user().id())
+        .flatMap(unused -> paymentRepository.save(newPayment));
   }
 }

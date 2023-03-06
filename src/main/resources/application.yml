@@ -24,3 +24,4 @@ app:
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
   stripe:
     apiKey: ${STRIPE_API_KEY}
+    webhookSecret: ${STRIPE_WEBHOOK_SECRET}

@@ -47,9 +47,11 @@ public final class GetSuccessPaymentPageController implements PaymentsController
 
     final var session = stripeService.getCheckoutSession(sessionId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    final var payment = buildPayment(session);
 
-    return registerPaymentUseCase.execute(buildPayment(session))
-        .doOnSuccess(payment -> stripeService.deactivatePaymentLink(session))
+    return registerPaymentUseCase.execute(payment)
+        .doOnSuccess(unused -> stripeService.associateInternalUser(session))
+        .doOnSuccess(unused -> stripeService.deactivatePaymentLink(session))
         .retryWhen(Retry.backoff(10, Duration.ofSeconds(1)))
         .thenMany(DataBufferUtils.read(successPage, new DefaultDataBufferFactory(), 4096));
   }

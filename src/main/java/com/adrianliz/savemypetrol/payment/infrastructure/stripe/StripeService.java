@@ -5,10 +5,12 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentPageGenerator;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 import com.stripe.model.PaymentLink;
 import com.stripe.model.Product;
 import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.CustomerUpdateParams;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PaymentLinkCreateParams.AfterCompletion;
 import com.stripe.param.PaymentLinkCreateParams.AfterCompletion.Redirect;
@@ -61,11 +63,25 @@ public final class StripeService implements PaymentPageGenerator {
     }
   }
 
+  public void associateInternalUser(final Session session) {
+    try {
+      Customer.retrieve(Subscription.retrieve(session.getSubscription()).getCustomer())
+          .update(
+              CustomerUpdateParams.builder()
+                  .putMetadata("telegram_user_id", session.getMetadata().get("telegram_user_id"))
+                  .build());
+    } catch (final StripeException e) {
+      // Ignore
+    }
+  }
+
   @Override
   public Optional<PaymentPage> generate(final PaymentUserId paymentUserId) {
     try {
       final var item = Product.list(ProductListParams.builder().setActive(true).build()).getData()
-          .stream().findFirst().orElseThrow();
+          .stream().filter(product -> "Save My Petrol Notifications".equals(product.getName()))
+          .findFirst()
+          .orElseThrow();
 
       return Optional.of(
           new PaymentPage(

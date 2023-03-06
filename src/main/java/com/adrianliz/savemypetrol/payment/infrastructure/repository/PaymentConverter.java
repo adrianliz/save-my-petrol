@@ -22,7 +22,7 @@ public final class PaymentConverter {
         .startTimestamp(payment.subscription().startDate().value().atZone(UTC).toEpochSecond())
         .endTimestamp(payment.subscription().endDate().value().atZone(UTC).toEpochSecond())
         .cancelTimestamp(
-            payment.subscription().hasCancelDate()
+            payment.subscription().isCancelled()
                 ? payment.subscription().cancelDate().value().atZone(UTC).toEpochSecond()
                 : null)
         .build();

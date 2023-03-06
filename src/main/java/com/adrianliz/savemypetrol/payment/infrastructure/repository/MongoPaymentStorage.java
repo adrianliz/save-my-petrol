@@ -6,7 +6,7 @@ import com.adrianliz.savemypetrol.payment.domain.Payment;
 import com.adrianliz.savemypetrol.payment.domain.PaymentRepository;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.repository.record.PaymentRecord;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -27,13 +27,12 @@ public class MongoPaymentStorage implements PaymentRepository {
 
   @Override
   public Mono<Payment> findActivePayment(final PaymentUserId paymentUserId) {
-    final Long now = LocalDateTime.now().atZone(UTC).toEpochSecond();
+    final var startOfToday = LocalDate.now().atStartOfDay().atZone(UTC);
     return dataAccessor.find(
             Query.query(
                 Criteria.where("userId").is(paymentUserId.value())
                     .and("cancelTimestamp").exists(false)
-                    .and("endTimestamp").gt(now)
-                    .and("startTimestamp").lt(now)),
+                    .and("endTimestamp").gt(startOfToday.toEpochSecond())),
             PaymentRecord.class)
         .next()
         .map(PaymentConverter::toEntity);
