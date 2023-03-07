@@ -17,7 +17,7 @@ public final class MongoPetrolStationFindShould extends MongoPetrolStationStorag
     final var targetLocation =
         PetrolStationLocationMother.move(
             sourceLocation, DoubleMother.randomBetween(10000L, 100000L));
-    final var distanceBetweenStations = sourceLocation.distanceTo(targetLocation);
+    final var distanceBetweenStations = sourceLocation.metersTo(targetLocation);
 
     final var filter =
         new PetrolStationFilter.PetrolStationFilterBuilder()
@@ -31,8 +31,8 @@ public final class MongoPetrolStationFindShould extends MongoPetrolStationStorag
     final var foundPetrolStations = storage.find(filter);
 
     assertThat(
-        Objects.requireNonNull(expectedPetrolStations.collectList().block())
-            .containsAll(Objects.requireNonNull(foundPetrolStations.collectList().block())))
+            Objects.requireNonNull(expectedPetrolStations.collectList().block())
+                .containsAll(Objects.requireNonNull(foundPetrolStations.collectList().block())))
         .isTrue();
   }
 }

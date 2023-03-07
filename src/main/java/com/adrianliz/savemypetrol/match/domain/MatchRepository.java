@@ -7,5 +7,5 @@ public interface MatchRepository {
 
   Mono<FindMatchesProcess> findAll();
 
-  Flux<Match> find(final FindMatchesProcess process);
+  Flux<Match> resolve(final FindMatchesProcess process);
 }

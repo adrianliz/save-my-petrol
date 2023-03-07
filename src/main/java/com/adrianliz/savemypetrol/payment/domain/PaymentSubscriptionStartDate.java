@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Date;
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentSubscriptionStartDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.match.domain;
 
+import com.adrianliz.savemypetrol.match.domain.exception.InvalidPetrolStationMatch;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationProduct;
 import java.io.Serializable;
@@ -11,8 +12,15 @@ public final class PetrolStationMatch implements Serializable {
   private final PetrolStationProduct product;
 
   public PetrolStationMatch(final PetrolStationId id, final PetrolStationProduct product) {
+    validate(id, product);
     this.id = id;
     this.product = product;
+  }
+
+  private void validate(final PetrolStationId id, final PetrolStationProduct product) {
+    if (id == null || product == null) {
+      throw new InvalidPetrolStationMatch();
+    }
   }
 
   public PetrolStationId id() {

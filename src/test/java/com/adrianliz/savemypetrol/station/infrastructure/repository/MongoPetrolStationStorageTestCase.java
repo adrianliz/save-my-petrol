@@ -16,16 +16,15 @@ import reactor.core.publisher.Flux;
 
 @SpringBootTest(
     classes = {
-        CacheConfiguration.class,
-        PetrolStationsCacheConfiguration.class,
-        MongoTestConfiguration.class,
-        MongoPetrolStationStorage.class
+      CacheConfiguration.class,
+      PetrolStationsCacheConfiguration.class,
+      MongoTestConfiguration.class,
+      MongoPetrolStationStorage.class
     })
 @Slf4j
 public class MongoPetrolStationStorageTestCase {
 
-  @Autowired
-  protected MongoPetrolStationStorage storage;
+  @Autowired protected MongoPetrolStationStorage storage;
 
   @AfterEach
   void tearDown() {
@@ -47,7 +46,7 @@ public class MongoPetrolStationStorageTestCase {
     final var petrolStations =
         PetrolStationMother.randomsWithLocation(
             PetrolStationLocationMother.randomWithLocation(
-                PetrolStationLocation.between(sourceLocation, targetLocation)));
+                sourceLocation.randomUntil(targetLocation)));
     return Flux.concat(petrolStations.stream().map(storage::save).collect(Collectors.toList()));
   }
 }

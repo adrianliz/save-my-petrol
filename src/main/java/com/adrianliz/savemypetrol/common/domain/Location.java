@@ -27,8 +27,8 @@ public abstract class Location implements Serializable {
         && longitude.compareTo(180.0) < 0;
   }
 
-  // SEE: https://stackoverflow.com/a/16794680 (in meters)
-  public double distanceTo(final Location targetLocation) {
+  // SEE: https://stackoverflow.com/a/16794680
+  public double metersTo(final Location targetLocation) {
     final int R = 6371; // Radius of the earth
 
     final double latDistance = Math.toRadians(targetLocation.latitude - latitude);
@@ -36,9 +36,9 @@ public abstract class Location implements Serializable {
     final double a =
         Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
             + Math.cos(Math.toRadians(latitude))
-            * Math.cos(Math.toRadians(targetLocation.latitude))
-            * Math.sin(lonDistance / 2)
-            * Math.sin(lonDistance / 2);
+                * Math.cos(Math.toRadians(targetLocation.latitude))
+                * Math.sin(lonDistance / 2)
+                * Math.sin(lonDistance / 2);
     final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     double distance = R * c * 1000; // convert to meters
 

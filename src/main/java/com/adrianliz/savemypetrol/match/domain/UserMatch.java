@@ -1,18 +1,26 @@
 package com.adrianliz.savemypetrol.match.domain;
 
-import com.adrianliz.savemypetrol.subscription.domain.SubscriptionUserId;
+import com.adrianliz.savemypetrol.match.domain.exception.InvalidUserMatch;
+import com.adrianliz.savemypetrol.trigger.domain.TriggerTargetUserId;
 import java.io.Serializable;
 import java.util.Objects;
 
 public final class UserMatch implements Serializable {
 
-  private final SubscriptionUserId id;
+  private final TriggerTargetUserId id;
 
-  public UserMatch(final SubscriptionUserId id) {
+  public UserMatch(final TriggerTargetUserId id) {
+    validate(id);
     this.id = id;
   }
 
-  public SubscriptionUserId id() {
+  private void validate(final TriggerTargetUserId id) {
+    if (id == null) {
+      throw new InvalidUserMatch();
+    }
+  }
+
+  public TriggerTargetUserId id() {
     return id;
   }
 

@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Location;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationLocation;
 import java.util.Objects;
 import java.util.Random;
 
@@ -16,32 +17,9 @@ public class PetrolStationLocation extends Location {
     this.address = address;
   }
 
-  public PetrolStationLocation(
-      final Double latitude, final Double longitude) {
-
+  public PetrolStationLocation(final Double latitude, final Double longitude) {
     super(latitude, longitude);
     address = "Unknown address";
-  }
-
-  public static PetrolStationLocation between(final PetrolStationLocation sourceLocation,
-      final PetrolStationLocation targetLocation) {
-
-    final var latitude = pickRandomPointBetween(sourceLocation.latitude, targetLocation.latitude);
-    final var longitude =
-        pickRandomPointBetween(sourceLocation.longitude, targetLocation.longitude);
-
-    return new PetrolStationLocation(latitude, longitude);
-  }
-
-  private static double pickRandomPointBetween(final double start, final double end) {
-    if (start == end) {
-      return start;
-    }
-
-    final Random randomGenerator = new Random();
-    final var deltaIncrement = end - start;
-    final var offsetFromStart = randomGenerator.nextFloat() * deltaIncrement;
-    return start + offsetFromStart;
   }
 
   @Override
@@ -58,16 +36,30 @@ public class PetrolStationLocation extends Location {
   }
 
   public PetrolStationLocation changeAddress(final String newAddress) {
-    return new PetrolStationLocation(super.latitude, super.longitude, newAddress);
+    return new PetrolStationLocation(latitude, longitude, newAddress);
   }
 
   // SEE: https://gis.stackexchange.com/a/2964
   // NOTE: This is not accurate, but it's good enough for our purposes
   public PetrolStationLocation move(final Double distanceInMeters) {
+    if (distanceInMeters == null || distanceInMeters <= 0) {
+      return this;
+    }
+
     final var latitude = super.latitude + (distanceInMeters / 111111);
     final var longitude = super.longitude + (distanceInMeters / 111111) / Math.cos(latitude);
 
     return new PetrolStationLocation(latitude, longitude, address);
+  }
+
+  public PetrolStationLocation randomUntil(final PetrolStationLocation targetLocation) {
+    if (targetLocation == null) {
+      return this;
+    }
+    final Random randomGenerator = new Random();
+    final var deltaIncrement = metersTo(targetLocation);
+    final var offsetFromStart = randomGenerator.nextFloat() * deltaIncrement;
+    return move(offsetFromStart);
   }
 
   public String address() {
@@ -83,8 +75,9 @@ public class PetrolStationLocation extends Location {
       return false;
     }
     final PetrolStationLocation location = (PetrolStationLocation) o;
-    return Objects.equals(latitude, location.latitude) && Objects.equals(
-        longitude, location.longitude) && Objects.equals(address, location.address);
+    return Objects.equals(latitude, location.latitude)
+        && Objects.equals(longitude, location.longitude)
+        && Objects.equals(address, location.address);
   }
 
   @Override

@@ -1,23 +1,32 @@
 package com.adrianliz.savemypetrol.match.domain;
 
-import com.adrianliz.savemypetrol.subscription.domain.SubscriptionId;
+import com.adrianliz.savemypetrol.match.domain.exception.InvalidMatch;
+import com.adrianliz.savemypetrol.trigger.domain.TriggerId;
 import java.io.Serializable;
 import java.util.Objects;
 
 public final class Match implements Serializable {
 
-  private final SubscriptionId id;
+  private final TriggerId id;
   private final UserMatch user;
   private final PetrolStationMatch petrolStation;
 
-  public Match(
-      final SubscriptionId id, final UserMatch user, final PetrolStationMatch petrolStation) {
+  public Match(final TriggerId id, final UserMatch user, final PetrolStationMatch petrolStation) {
+    validate(id, user, petrolStation);
     this.id = id;
     this.user = user;
     this.petrolStation = petrolStation;
   }
 
-  public SubscriptionId id() {
+  private void validate(
+      final TriggerId id, final UserMatch user, final PetrolStationMatch petrolStation) {
+
+    if (id == null || user == null || petrolStation == null) {
+      throw new InvalidMatch();
+    }
+  }
+
+  public TriggerId id() {
     return id;
   }
 

@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
 import com.adrianliz.savemypetrol.common.domain.IncrementalIdentifier;
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentUserId;
 import java.util.Objects;
 
 public final class PaymentUserId extends IncrementalIdentifier {

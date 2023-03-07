@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.product.domain;
 
+import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductException;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -16,9 +17,20 @@ public class Product implements Comparable<Product>, Serializable {
       final ProductType type,
       final ProductPrice price) {
 
+    validate(sellerPetrolStationId, type, price);
     this.sellerPetrolStationId = sellerPetrolStationId;
     this.type = type;
     this.price = price;
+  }
+
+  private void validate(
+      final PetrolStationId sellerPetrolStationId,
+      final ProductType type,
+      final ProductPrice price) {
+
+    if (sellerPetrolStationId == null || type == null || price == null) {
+      throw new InvalidProductException();
+    }
   }
 
   public boolean hasType(final ProductType type) {

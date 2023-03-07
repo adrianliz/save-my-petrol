@@ -51,37 +51,37 @@ public final class StripeWebhook {
           }
           final var newSubscription = Subscription.retrieve(invoice.getSubscription());
           final var userId =
-              Long.valueOf(Customer.retrieve(newSubscription.getCustomer())
-                  .getMetadata()
-                  .get("telegram_user_id"));
+              Long.valueOf(
+                  Customer.retrieve(newSubscription.getCustomer())
+                      .getMetadata()
+                      .get("telegram_user_id"));
           final var paymentSubscription =
               new PaymentSubscription(
                   new PaymentSubscriptionStartDate(
                       LocalDateTime.ofInstant(
-                          Instant.ofEpochSecond(newSubscription.getCurrentPeriodStart()),
-                          UTC)),
+                          Instant.ofEpochSecond(newSubscription.getCurrentPeriodStart()), UTC)),
                   new PaymentSubscriptionEndDate(
                       LocalDateTime.ofInstant(
-                          Instant.ofEpochSecond(newSubscription.getCurrentPeriodEnd()),
-                          UTC)));
-          return findActivePaymentService.execute(new PaymentUserId(userId))
-              .flatMap(payment -> updatePaymentUseCase.execute(
-                  payment.replaceSubscription(paymentSubscription)))
+                          Instant.ofEpochSecond(newSubscription.getCurrentPeriodEnd()), UTC)));
+          return findActivePaymentService
+              .execute(new PaymentUserId(userId))
+              .flatMap(payment -> updatePaymentUseCase.execute(payment.renew(paymentSubscription)))
               .map(unused -> "Success.");
         }
         case "customer.subscription.deleted" -> {
           final var subscription = (Subscription) eventBody;
           final var userIdToDelete =
-              Long.valueOf(Customer.retrieve(subscription.getCustomer())
-                  .getMetadata()
-                  .get("telegram_user_id"));
-          final var cancelDate = new PaymentSubscriptionCancelDate(
-              LocalDateTime.ofInstant(
-                  Instant.ofEpochSecond(subscription.getCanceledAt()),
-                  UTC));
-          return findActivePaymentService.execute(new PaymentUserId(userIdToDelete))
-              .flatMap(
-                  payment -> updatePaymentUseCase.execute(payment.cancelSubscription(cancelDate)))
+              Long.valueOf(
+                  Customer.retrieve(subscription.getCustomer())
+                      .getMetadata()
+                      .get("telegram_user_id"));
+          final var cancelDate =
+              new PaymentSubscriptionCancelDate(
+                  LocalDateTime.ofInstant(
+                      Instant.ofEpochSecond(subscription.getCanceledAt()), UTC));
+          return findActivePaymentService
+              .execute(new PaymentUserId(userIdToDelete))
+              .flatMap(payment -> updatePaymentUseCase.execute(payment.cancel(cancelDate)))
               .map(unused -> "Success.");
         }
         default -> {

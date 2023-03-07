@@ -6,13 +6,14 @@ import com.adrianliz.savemypetrol.match.domain.MatchRepository;
 import com.adrianliz.savemypetrol.match.infrastructure.repository.record.MatchRecord;
 import com.adrianliz.savemypetrol.station.domain.PetrolStation;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationRepository;
-import com.adrianliz.savemypetrol.subscription.infrastructure.repository.record.SubscriptionRecord;
+import com.adrianliz.savemypetrol.trigger.infrastructure.repository.record.TriggerRecord;
 import com.hazelcast.map.IMap;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.geo.Metrics;
@@ -40,7 +41,7 @@ public class MatchProxyRepository implements MatchRepository {
     final var startTime = Instant.now();
     log.info("MatchProxyRepository> Finding matches started at {}", LocalDateTime.now());
 
-    Flux.defer(() -> petrolStationRepository.findAll().flatMap(this::matchesFrom))
+    Flux.defer(() -> petrolStationRepository.findAll().flatMap(this::findMatchesFrom))
         .subscribeOn(Schedulers.boundedElastic())
         .collectList()
         .doOnNext(matches -> matchesCache.put(process, matches))
@@ -59,11 +60,12 @@ public class MatchProxyRepository implements MatchRepository {
   }
 
   @Override
-  public Flux<Match> find(final FindMatchesProcess process) {
-    return Flux.fromIterable(matchesCache.getOrDefault(process, Collections.emptyList()));
+  public Flux<Match> resolve(final FindMatchesProcess process) {
+    return Flux.fromIterable(
+        Optional.ofNullable(matchesCache.remove(process)).orElse(Collections.emptyList()));
   }
 
-  private Flux<Match> matchesFrom(final PetrolStation petrolStation) {
+  private Flux<Match> findMatchesFrom(final PetrolStation petrolStation) {
     final var petrolStationProducts = petrolStation.products();
     if (petrolStationProducts.isEmpty()) {
       return Flux.empty();
@@ -78,7 +80,7 @@ public class MatchProxyRepository implements MatchRepository {
                         petrolStationProduct ->
                             Criteria.where("targetProduct.typeId")
                                 .is(petrolStationProduct.type().id())
-                                .and("targetProduct.triggerCents")
+                                .and("targetProduct.cents")
                                 .gte(petrolStationProduct.price().cents()))
                     .toList());
 
@@ -97,7 +99,7 @@ public class MatchProxyRepository implements MatchRepository {
             Aggregation.match(targetProducts));
 
     return dataAccessor
-        .aggregate(matches, SubscriptionRecord.class, MatchRecord.class)
+        .aggregate(matches, TriggerRecord.class, MatchRecord.class)
         .map(matchResult -> matchResult.buildSubscriptionMatch(petrolStation));
   }
 }

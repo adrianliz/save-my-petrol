@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Date;
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentSubscriptionEndDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,10 +16,6 @@ public final class PaymentSubscriptionEndDate extends Date {
     if (value == null) {
       throw new InvalidPaymentSubscriptionEndDate();
     }
-  }
-
-  public boolean isAfter(final PaymentSubscriptionCancelDate cancelDate) {
-    return value.isAfter(cancelDate.value());
   }
 
   @Override

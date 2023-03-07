@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.common.domain.IncrementalIdentifier;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationId;
 import java.util.Objects;
 
 public class PetrolStationId extends IncrementalIdentifier {

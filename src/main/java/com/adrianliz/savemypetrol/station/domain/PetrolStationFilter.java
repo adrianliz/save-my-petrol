@@ -2,6 +2,7 @@ package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Location;
 import com.adrianliz.savemypetrol.common.domain.Page;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationFilter;
 
 public class PetrolStationFilter {
 
@@ -10,7 +11,8 @@ public class PetrolStationFilter {
   private final Page pageRequested;
 
   public PetrolStationFilter(
-      final PetrolStationLocation sourceLocation, final Double maxMetersFromSource,
+      final PetrolStationLocation sourceLocation,
+      final Double maxMetersFromSource,
       final Page pageRequested) {
 
     validate(sourceLocation, maxMetersFromSource, pageRequested);
@@ -74,8 +76,7 @@ public class PetrolStationFilter {
     private Double maxMetersFromSource;
     private Page pageRequested;
 
-    public PetrolStationFilterBuilder() {
-    }
+    public PetrolStationFilterBuilder() {}
 
     public PetrolStationFilterBuilder sourceLocation(final PetrolStationLocation sourceLocation) {
       this.sourceLocation = sourceLocation;

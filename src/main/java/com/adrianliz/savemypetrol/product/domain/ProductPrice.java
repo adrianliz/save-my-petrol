@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.product.domain;
 
 import com.adrianliz.savemypetrol.common.domain.Currency;
+import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductPrice;
 import java.io.Serializable;
 import java.util.Objects;
 

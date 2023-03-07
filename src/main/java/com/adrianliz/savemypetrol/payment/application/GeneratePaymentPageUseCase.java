@@ -1,8 +1,8 @@
 package com.adrianliz.savemypetrol.payment.application;
 
-import com.adrianliz.savemypetrol.payment.domain.PaymentPageGenerationError;
 import com.adrianliz.savemypetrol.payment.domain.PaymentPageGenerator;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
+import com.adrianliz.savemypetrol.payment.domain.exception.PaymentPageGenerationError;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;

@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentPage;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;

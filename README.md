@@ -9,7 +9,7 @@ Find the cheapest petrol stations in Spain.
 - Find a petrol station by id [X]
 - Find petrol stations by simple filter [X]
 - Find products on petrol stations by simple filter [X]
-- Add subscription to a target product [X]
+- Add trigger to a target product [X]
 - Generate matches based on subscriptions [X]
 - Add authentication and authorization []
 - Add different sorting filters []

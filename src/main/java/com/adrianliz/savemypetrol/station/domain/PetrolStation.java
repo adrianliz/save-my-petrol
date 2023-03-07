@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.product.domain.ProductType;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -19,10 +20,22 @@ public class PetrolStation implements Serializable {
       final PetrolStationLocation location,
       final List<PetrolStationProduct> products) {
 
+    validate(id, name, location, products);
     this.id = id;
     this.name = name;
     this.location = location;
     this.products = products;
+  }
+
+  private void validate(
+      final PetrolStationId id,
+      final PetrolStationName name,
+      final PetrolStationLocation location,
+      final List<PetrolStationProduct> products) {
+
+    if (id == null || name == null || location == null || products == null) {
+      throw new InvalidPetrolStationException();
+    }
   }
 
   public PetrolStationId id() {

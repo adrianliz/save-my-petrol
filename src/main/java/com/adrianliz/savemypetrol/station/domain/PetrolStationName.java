@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.common.domain.StringValueObject;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationName;
 import java.util.Objects;
 
 public final class PetrolStationName extends StringValueObject {

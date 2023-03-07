@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.product.domain;
 
+import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductFilterException;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationRepository;
 import java.util.Comparator;
@@ -18,8 +19,19 @@ public class ProductFilter {
   public ProductFilter(
       final List<PetrolStationId> targetPetrolStationsIds, final ProductType targetProductType) {
 
+    validate(targetPetrolStationsIds, targetProductType);
     this.targetPetrolStationsIds = targetPetrolStationsIds;
     this.targetProductType = targetProductType;
+  }
+
+  private void validate(
+      final List<PetrolStationId> targetPetrolStationsIds, final ProductType targetProductType) {
+
+    if (targetPetrolStationsIds == null
+        || targetPetrolStationsIds.isEmpty()
+        || targetProductType == null) {
+      throw new InvalidProductFilterException();
+    }
   }
 
   public Flux<Product> applyTo(final Flux<Product> products) {
@@ -46,8 +58,7 @@ public class ProductFilter {
     private List<PetrolStationId> targetPetrolStationsIds;
     private ProductType targetProductType;
 
-    public ProductFilterBuilder() {
-    }
+    public ProductFilterBuilder() {}
 
     public ProductFilterBuilder targetPetrolStationsIds(
         final List<PetrolStationId> targetPetrolStationsIds) {

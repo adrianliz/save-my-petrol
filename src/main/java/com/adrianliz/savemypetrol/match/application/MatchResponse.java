@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public final class MatchResponse {
 
-  private final String subscriptionId;
+  private final String triggerId;
   private final Long userId;
   private final Long petrolStationId;
   private final TargetProductResponse targetProduct;
@@ -32,6 +32,6 @@ public final class MatchResponse {
   private static final class TargetProductResponse {
 
     private final String type;
-    private final Long price;
+    private final Long cents;
   }
 }

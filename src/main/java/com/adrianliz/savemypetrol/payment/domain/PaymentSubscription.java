@@ -1,5 +1,7 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentSubscription;
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentSubscriptionCancelDate;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -9,7 +11,8 @@ public final class PaymentSubscription implements Serializable {
   private final PaymentSubscriptionEndDate endDate;
   private final PaymentSubscriptionCancelDate cancelDate;
 
-  private PaymentSubscription(final PaymentSubscriptionStartDate startDate,
+  private PaymentSubscription(
+      final PaymentSubscriptionStartDate startDate,
       final PaymentSubscriptionEndDate endDate,
       final PaymentSubscriptionCancelDate cancelDate) {
     this.startDate = startDate;
@@ -17,19 +20,32 @@ public final class PaymentSubscription implements Serializable {
     this.cancelDate = cancelDate;
   }
 
-  public PaymentSubscription(final PaymentSubscriptionStartDate startDate,
-      final PaymentSubscriptionEndDate endDate) {
+  public PaymentSubscription(
+      final PaymentSubscriptionStartDate startDate, final PaymentSubscriptionEndDate endDate) {
+
+    validate(startDate, endDate);
     this.startDate = startDate;
     this.endDate = endDate;
     cancelDate = null;
+  }
+
+  private void validate(
+      final PaymentSubscriptionStartDate startDate, final PaymentSubscriptionEndDate endDate) {
+
+    if (startDate == null || endDate == null || startDate.isAfter(endDate)) {
+      throw new InvalidPaymentSubscription();
+    }
   }
 
   public boolean isCancelled() {
     return cancelDate != null;
   }
 
-  public boolean createdAfter(final PaymentSubscription paymentSubscription) {
-    return !isCancelled() && startDate.isAfter(paymentSubscription.endDate);
+  public boolean createdAfter(final PaymentSubscription subscription) {
+    if (subscription == null) {
+      throw new InvalidPaymentSubscription();
+    }
+    return startDate.isAfter(subscription.endDate);
   }
 
   public PaymentSubscription cancel(final PaymentSubscriptionCancelDate cancelDate) {
@@ -60,8 +76,9 @@ public final class PaymentSubscription implements Serializable {
       return false;
     }
     final PaymentSubscription that = (PaymentSubscription) o;
-    return Objects.equals(startDate, that.startDate) && Objects.equals(endDate,
-        that.endDate) && Objects.equals(cancelDate, that.cancelDate);
+    return Objects.equals(startDate, that.startDate)
+        && Objects.equals(endDate, that.endDate)
+        && Objects.equals(cancelDate, that.cancelDate);
   }
 
   @Override

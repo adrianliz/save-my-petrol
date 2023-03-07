@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.payment.domain;
 
+import com.adrianliz.savemypetrol.payment.domain.exception.InvalidPaymentUser;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,7 +9,14 @@ public final class PaymentUser implements Serializable {
   private final PaymentUserId id;
 
   public PaymentUser(final PaymentUserId id) {
+    validate(id);
     this.id = id;
+  }
+
+  private void validate(final PaymentUserId id) {
+    if (id == null) {
+      throw new InvalidPaymentUser();
+    }
   }
 
   public PaymentUserId id() {
