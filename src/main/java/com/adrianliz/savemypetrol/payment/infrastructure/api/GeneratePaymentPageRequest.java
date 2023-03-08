@@ -10,9 +10,9 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 public final class GeneratePaymentPageRequest {
 
-  private final Long paymentUserId;
+  private final Long userId;
 
   public PaymentUserId buildPaymentUserId() {
-    return new PaymentUserId(paymentUserId);
+    return new PaymentUserId(userId);
   }
 }

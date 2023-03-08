@@ -28,11 +28,15 @@ public class MongoPaymentStorage implements PaymentRepository {
   @Override
   public Mono<Payment> findActivePayment(final PaymentUserId paymentUserId) {
     final var startOfToday = LocalDate.now().atStartOfDay().atZone(UTC);
-    return dataAccessor.find(
+    return dataAccessor
+        .find(
             Query.query(
-                Criteria.where("userId").is(paymentUserId.value())
-                    .and("cancelTimestamp").exists(false)
-                    .and("endTimestamp").gt(startOfToday.toEpochSecond())),
+                Criteria.where("userId")
+                    .is(paymentUserId.value())
+                    .and("subscription.cancelTimestamp")
+                    .exists(false)
+                    .and("subscription.endTimestamp")
+                    .gt(startOfToday.toEpochSecond())),
             PaymentRecord.class)
         .next()
         .map(PaymentConverter::toEntity);

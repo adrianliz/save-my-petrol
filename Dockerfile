@@ -11,4 +11,4 @@ COPY --from=builder /save-my-petrol/target/*.jar /save-my-petrol/save-my-petrol.
 ARG APP_PORT
 ARG APP_ENV
 EXPOSE ${APP_PORT}
-CMD java -Dspring.profiles.active=${APP_ENV} -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8 -XX:+UseContainerSupport -jar /save-my-petrol/save-my-petrol.jar
+CMD java -Dspring.profiles.active=${APP_ENV} -Dnetworkaddress.cache.ttl=60 -Xmx300m -Xss512k -XX:CICompilerCount=2 -Dfile.encoding=UTF-8 -XX:+UseContainerSupport -jar /save-my-petrol/save-my-petrol.jar

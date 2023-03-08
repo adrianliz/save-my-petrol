@@ -19,11 +19,13 @@ import com.stripe.param.PaymentLinkUpdateParams;
 import com.stripe.param.ProductListParams;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
+@Slf4j
 public final class StripeService implements PaymentPageGenerator {
 
   private final String successPaymentUrl;
@@ -33,15 +35,20 @@ public final class StripeService implements PaymentPageGenerator {
       @Value("${app.domain}") final String domain) {
 
     Stripe.apiKey = apiKey;
-    successPaymentUrl = UriComponentsBuilder.fromHttpUrl(domain)
-        .path("/api/v1/payments/success-page").queryParam("session_id", "{CHECKOUT_SESSION_ID}")
-        .build().toUriString();
+    Stripe.setMaxNetworkRetries(5);
+    successPaymentUrl =
+        UriComponentsBuilder.fromHttpUrl(domain)
+            .path("/api/v1/payments/success-page")
+            .queryParam("session_id", "{CHECKOUT_SESSION_ID}")
+            .build()
+            .toUriString();
   }
 
   public Optional<Session> getCheckoutSession(final String sessionId) {
     try {
       return Optional.ofNullable(Session.retrieve(sessionId));
     } catch (final StripeException ex) {
+      log.error("Error retrieving checkout session", ex);
       return Optional.empty();
     }
   }
@@ -50,16 +57,8 @@ public final class StripeService implements PaymentPageGenerator {
     try {
       return Optional.ofNullable(Subscription.retrieve(subscriptionId));
     } catch (final StripeException ex) {
+      log.error("Error retrieving subscription", ex);
       return Optional.empty();
-    }
-  }
-
-  public void deactivatePaymentLink(final Session session) {
-    try {
-      PaymentLink.retrieve(session.getPaymentLink())
-          .update(PaymentLinkUpdateParams.builder().setActive(false).build());
-    } catch (final StripeException e) {
-      // Ignore
     }
   }
 
@@ -70,37 +69,49 @@ public final class StripeService implements PaymentPageGenerator {
               CustomerUpdateParams.builder()
                   .putMetadata("telegram_user_id", session.getMetadata().get("telegram_user_id"))
                   .build());
-    } catch (final StripeException e) {
-      // Ignore
+    } catch (final StripeException ex) {
+      log.error("Error associating internal user", ex);
+    }
+  }
+
+  public void deactivatePaymentLink(final Session session) {
+    try {
+      PaymentLink.retrieve(session.getPaymentLink())
+          .update(PaymentLinkUpdateParams.builder().setActive(false).build());
+    } catch (final StripeException ex) {
+      log.error("Error deactivating payment link", ex);
     }
   }
 
   @Override
   public Optional<PaymentPage> generate(final PaymentUserId paymentUserId) {
     try {
-      final var item = Product.list(ProductListParams.builder().setActive(true).build()).getData()
-          .stream().filter(product -> "Save My Petrol Notifications".equals(product.getName()))
-          .findFirst()
-          .orElseThrow();
+      final var item =
+          Product.list(ProductListParams.builder().setActive(true).build()).getData().stream()
+              .filter(product -> "Save My Petrol Notifications".equals(product.getName()))
+              .findFirst()
+              .orElseThrow();
 
       return Optional.of(
           new PaymentPage(
               PaymentLink.create(
                       PaymentLinkCreateParams.builder()
-                          .addAllLineItem(List.of(LineItem.builder()
-                              .setPrice(item.getDefaultPrice())
-                              .setQuantity(1L)
-                              .build()))
+                          .addAllLineItem(
+                              List.of(
+                                  LineItem.builder()
+                                      .setPrice(item.getDefaultPrice())
+                                      .setQuantity(1L)
+                                      .build()))
                           .setAfterCompletion(
                               AfterCompletion.builder()
                                   .setType(AfterCompletion.Type.REDIRECT)
-                                  .setRedirect(Redirect.builder()
-                                      .setUrl(successPaymentUrl).build())
+                                  .setRedirect(Redirect.builder().setUrl(successPaymentUrl).build())
                                   .build())
                           .putMetadata("telegram_user_id", paymentUserId.value().toString())
                           .build())
                   .getUrl()));
     } catch (final StripeException ex) {
+      log.error("Error generating payment page", ex);
       return Optional.empty();
     }
   }

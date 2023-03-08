@@ -13,12 +13,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public final class PaymentRecord {
 
-  @Id
-  @EqualsAndHashCode.Include
-  private UUID id;
+  @Id @EqualsAndHashCode.Include private UUID id;
 
   private Long userId;
-  private Long startTimestamp;
-  private Long endTimestamp;
-  private Long cancelTimestamp;
+  private PaymentSubscriptionRecord subscription;
 }

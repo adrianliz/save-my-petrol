@@ -11,12 +11,13 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentSubscriptionStartDate;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUser;
 import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.stripe.StripeService;
-import com.stripe.model.checkout.Session;
+import com.stripe.model.Subscription;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -33,6 +34,7 @@ import reactor.util.retry.Retry;
 
 @RestController
 @AllArgsConstructor(onConstructor = @__(@Autowired))
+@Slf4j
 public final class GetSuccessPaymentPageController implements PaymentsControllerV1 {
 
   private final RegisterPaymentUseCase registerPaymentUseCase;
@@ -41,34 +43,71 @@ public final class GetSuccessPaymentPageController implements PaymentsController
   @Value("classpath:success-page.html")
   private final Resource successPage;
 
+  @Value("classpath:error-page.html")
+  private final Resource errorPage;
+
   @GetMapping("/success-page")
   public Flux<DataBuffer> getSuccessPaymentPage(
       @RequestParam(value = "session_id") final String sessionId) {
 
-    final var session = stripeService.getCheckoutSession(sessionId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    final var payment = buildPayment(session);
+    final var session =
+        stripeService
+            .getCheckoutSession(sessionId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    final var subscription = stripeService.getSubscription(session.getSubscription());
+    if (subscription.isEmpty()) {
+      log.error("Subscription not found for session {}", sessionId);
+      return DataBufferUtils.read(errorPage, new DefaultDataBufferFactory(), 4096);
+    }
 
-    return registerPaymentUseCase.execute(payment)
-        .doOnSuccess(unused -> stripeService.associateInternalUser(session))
-        .doOnSuccess(unused -> stripeService.deactivatePaymentLink(session))
-        .retryWhen(Retry.backoff(10, Duration.ofSeconds(1)))
-        .thenMany(DataBufferUtils.read(successPage, new DefaultDataBufferFactory(), 4096));
+    final var userId = session.getMetadata().get("telegram_user_id");
+    try {
+      final var payment = buildPayment(Long.valueOf(userId), subscription.get());
+
+      return registerPaymentUseCase
+          .execute(payment)
+          .doOnSuccess(unused -> stripeService.associateInternalUser(session))
+          .doOnSuccess(unused -> stripeService.deactivatePaymentLink(session))
+          .retryWhen(
+              Retry.backoff(5, Duration.ofSeconds(5))
+                  .doAfterRetry(
+                      retry ->
+                          log.error(
+                              "Error registering payment (retry={})",
+                              retry.totalRetries(),
+                              retry.failure())))
+          .thenMany(DataBufferUtils.read(successPage, new DefaultDataBufferFactory(), 4096))
+          .onErrorResume(
+              ex -> {
+                log.error(
+                    "Error registering payment (userId={}, session={}, subscription={})",
+                    userId,
+                    session.getId(),
+                    subscription.map(Subscription::getId).orElse("unknown"),
+                    ex);
+                return DataBufferUtils.read(errorPage, new DefaultDataBufferFactory(), 4096);
+              });
+    } catch (final Exception ex) {
+      log.error(
+          "Error registering payment (userId={}, session={}, subscription={})",
+          userId,
+          session.getId(),
+          subscription.map(Subscription::getId).orElse("unknown"),
+          ex);
+      return DataBufferUtils.read(errorPage, new DefaultDataBufferFactory(), 4096);
+    }
   }
 
-  private Payment buildPayment(final Session session) {
-    final var subscription = stripeService.getSubscription(session.getSubscription())
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-    return new Payment(new PaymentId(UUID.randomUUID().toString()),
-        new PaymentUser(
-            new PaymentUserId(Long.valueOf(session.getMetadata().get("telegram_user_id")))),
+  private Payment buildPayment(final Long userId, final Subscription subscription) {
+    return new Payment(
+        new PaymentId(UUID.randomUUID().toString()),
+        new PaymentUser(new PaymentUserId(userId)),
         new PaymentSubscription(
             new PaymentSubscriptionStartDate(
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodStart()),
-                    UTC)),
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochSecond(subscription.getCurrentPeriodStart()), UTC)),
             new PaymentSubscriptionEndDate(
-                LocalDateTime.ofInstant(Instant.ofEpochSecond(subscription.getCurrentPeriodEnd()),
-                    UTC))));
+                LocalDateTime.ofInstant(
+                    Instant.ofEpochSecond(subscription.getCurrentPeriodEnd()), UTC))));
   }
 }
