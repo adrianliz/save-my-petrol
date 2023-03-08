@@ -9,8 +9,9 @@ Find the cheapest petrol stations in Spain.
 - Find a petrol station by id [X]
 - Find petrol stations by simple filter [X]
 - Find products on petrol stations by simple filter [X]
-- Add trigger to a target product [X]
+- Add trigger to a target product and user [X]
 - Generate matches based on subscriptions [X]
+- Stripe integration to allow payments [X]
 - Add authentication and authorization []
 - Add different sorting filters []
 - Find petrol stations in a route defined by two points []
@@ -30,12 +31,11 @@ Contributes are welcome!
 
 Make a PR resolving one feature/improvement or create new feature/improvement task
 
-## Deploy in a DEV environment
-
-Define these environment variables:
+## Environment variables
 
 ```bash
-APP_ENV=dev
+APP_ENV
+APP_DOMAIN
 APP_PORT
 
 MONGO_DB_PORT
@@ -43,7 +43,14 @@ MONGO_ROOT_USER
 MONGO_ROOT_PASSWORD
 MONGO_DATABASE
 MONGO_EXPRESS_PORT
+
+MONGO_DB_URI # Needed only for application.yml
+
+STRIPE_API_KEY
+STRIPE_WEBHOOK_SECRET
 ```
+
+## Deploy locally
 
 ### Without docker
 
@@ -61,7 +68,7 @@ Execute:
 docker-compose --env-file ${env_file} up -d mongodb && mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-## With mongo and app in docker
+## Deploy in production with docker
 
 Execute:
 
