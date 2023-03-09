@@ -17,7 +17,7 @@ public class ProductPrice implements Serializable {
   }
 
   private void validate(final Long cents, final Currency currency) {
-    if (cents == null || currency == null || cents < 0) {
+    if (cents == null || currency == null || cents <= 0) {
       throw new InvalidProductPrice();
     }
   }

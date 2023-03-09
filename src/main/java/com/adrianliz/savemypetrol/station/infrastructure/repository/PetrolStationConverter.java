@@ -22,6 +22,7 @@ public final class PetrolStationConverter {
             record.getLocation().getY(), record.getLocation().getX(), record.getAddress());
     final var products =
         record.getProducts().stream()
+            .filter(product -> product.getCents() != null && product.getCents() > 0)
             .map(
                 productRecord ->
                     new PetrolStationProduct(

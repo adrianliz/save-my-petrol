@@ -1,7 +1,7 @@
 package com.adrianliz.savemypetrol.station.domain;
 
 import com.adrianliz.savemypetrol.product.domain.ProductType;
-import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStationException;
+import com.adrianliz.savemypetrol.station.domain.exception.InvalidPetrolStation;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class PetrolStation implements Serializable {
       final List<PetrolStationProduct> products) {
 
     if (id == null || name == null || location == null || products == null) {
-      throw new InvalidPetrolStationException();
+      throw new InvalidPetrolStation();
     }
   }
 

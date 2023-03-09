@@ -7,15 +7,19 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @AllArgsConstructor
+@Jacksonized
+@Builder
+@Getter
 public class FindPetrolStationsRequest {
 
-  @NotNull
-  private final Double sourceLatitude;
+  @NotNull private final Double sourceLatitude;
 
-  @NotNull
-  private final Double sourceLongitude;
+  @NotNull private final Double sourceLongitude;
 
   @Min(10000)
   @Max(100000)

@@ -1,3 +1,10 @@
 package com.adrianliz.savemypetrol.trigger.domain.exception;
 
-public final class InvalidTriggerTargetUserDistance extends RuntimeException {}
+import com.adrianliz.savemypetrol.common.domain.SaveMyPetrolException;
+import org.springframework.http.HttpStatus;
+
+public final class InvalidTriggerTargetUserDistance extends SaveMyPetrolException {
+  public InvalidTriggerTargetUserDistance() {
+    super(HttpStatus.BAD_REQUEST, "Invalid trigger target user distance.");
+  }
+}

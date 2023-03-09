@@ -1,6 +1,6 @@
 package com.adrianliz.savemypetrol.product.domain;
 
-import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductFilterException;
+import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductFilter;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationRepository;
 import java.util.Comparator;
@@ -30,7 +30,7 @@ public class ProductFilter {
     if (targetPetrolStationsIds == null
         || targetPetrolStationsIds.isEmpty()
         || targetProductType == null) {
-      throw new InvalidProductFilterException();
+      throw new InvalidProductFilter();
     }
   }
 

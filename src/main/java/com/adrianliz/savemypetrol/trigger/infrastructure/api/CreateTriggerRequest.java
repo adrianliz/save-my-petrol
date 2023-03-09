@@ -13,8 +13,14 @@ import java.util.UUID;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.extern.jackson.Jacksonized;
 
 @AllArgsConstructor
+@Jacksonized
+@Builder
+@Getter
 public final class CreateTriggerRequest {
 
   @NotNull private final Long userId;
@@ -36,13 +42,14 @@ public final class CreateTriggerRequest {
             new TriggerTargetUserDistance(maxMetersFromSource)),
         new TriggerTargetProduct(
             ProductType.findById(targetProduct.id),
-            new TriggerTargetProductPrice(targetProduct.price)));
+            new TriggerTargetProductPrice(targetProduct.cents)));
   }
 
   @AllArgsConstructor
+  @Getter
   private static final class TargetProduct {
 
     @NotNull final Integer id;
-    @NotNull final Long price;
+    @NotNull final Long cents;
   }
 }
