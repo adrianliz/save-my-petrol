@@ -8,4 +8,6 @@ public interface TriggerRepository {
   Mono<Void> save(final Trigger trigger);
 
   Flux<Trigger> findByUserId(final TriggerTargetUserId id);
+  
+  Mono<Void> delete(final TriggerId id);
 }

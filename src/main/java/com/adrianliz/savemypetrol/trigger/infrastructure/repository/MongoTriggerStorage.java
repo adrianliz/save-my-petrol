@@ -1,6 +1,7 @@
 package com.adrianliz.savemypetrol.trigger.infrastructure.repository;
 
 import com.adrianliz.savemypetrol.trigger.domain.Trigger;
+import com.adrianliz.savemypetrol.trigger.domain.TriggerId;
 import com.adrianliz.savemypetrol.trigger.domain.TriggerRepository;
 import com.adrianliz.savemypetrol.trigger.domain.TriggerTargetUserId;
 import com.adrianliz.savemypetrol.trigger.infrastructure.repository.record.TriggerRecord;
@@ -28,5 +29,12 @@ public class MongoTriggerStorage implements TriggerRepository {
     return dataAccessor
         .find(Query.query(Criteria.where("userId").is(id.value())), TriggerRecord.class)
         .map(TriggerConverter::toEntity);
+  }
+
+  @Override
+  public Mono<Void> delete(final TriggerId id) {
+    return dataAccessor
+        .findAndRemove(Query.query(Criteria.where("id").is(id.value())), TriggerRecord.class)
+        .then();
   }
 }
