@@ -22,6 +22,8 @@ public final class MatchRecord {
         new UserMatch(new TriggerTargetUserId(userId)),
         new PetrolStationMatch(
             petrolStation.id(),
+            petrolStation.name(),
+            petrolStation.location(),
             petrolStation.products().stream()
                 .filter(product -> product.type().id().equals(targetProduct.getTypeId()))
                 .findFirst()
