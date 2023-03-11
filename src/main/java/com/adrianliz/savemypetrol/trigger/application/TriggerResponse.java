@@ -21,13 +21,17 @@ public final class TriggerResponse {
         targetUser.sourceLocation().latitude(),
         targetUser.sourceLocation().longitude(),
         targetUser.maxDistanceFromSource().meters(),
-        new TargetProduct(targetProduct.type().id(), targetProduct.price().cents()));
+        new TargetProduct(
+            targetProduct.type().id(),
+            targetProduct.type().label(),
+            targetProduct.price().cents()));
   }
 
   @AllArgsConstructor
   @Getter
   private static final class TargetProduct {
     final Integer id;
+    final String label;
     final Long cents;
   }
 }

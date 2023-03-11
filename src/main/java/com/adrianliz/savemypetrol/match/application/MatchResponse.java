@@ -31,13 +31,16 @@ public final class MatchResponse {
             petrolStationLocation.latitude(),
             petrolStationLocation.longitude()),
         new ProductMatchResponse(
-            petrolStationProduct.type().id(), petrolStationProduct.price().cents()));
+            petrolStationProduct.type().id(),
+            petrolStationProduct.type().label(),
+            petrolStationProduct.price().cents()));
   }
 
   @AllArgsConstructor
   @Getter
   private static final class ProductMatchResponse {
     private final Integer id;
+    private final String label;
     private final Long cents;
   }
 

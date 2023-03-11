@@ -29,4 +29,8 @@ public enum ProductType implements Serializable {
   public Integer id() {
     return id;
   }
+
+  public String label() {
+    return name;
+  }
 }
