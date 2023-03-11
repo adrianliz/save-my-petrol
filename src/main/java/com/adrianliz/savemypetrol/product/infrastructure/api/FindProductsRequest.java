@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.product.infrastructure.api;
 
+import com.adrianliz.savemypetrol.common.domain.Page;
 import com.adrianliz.savemypetrol.product.domain.ProductFilter;
 import com.adrianliz.savemypetrol.product.domain.ProductType;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
@@ -21,13 +22,14 @@ public class FindProductsRequest {
 
   @NotEmpty @Valid private final List<@NotNull Long> targetPetrolStationsIds;
   @NotNull private final Integer targetProductTypeId;
+  private final Integer maxPrices;
 
   public ProductFilter buildFilter() {
-    final var filter = new ProductFilter.ProductFilterBuilder();
-    filter.targetProductType(ProductType.findById(targetProductTypeId));
-    filter.targetPetrolStationsIds(
-        targetPetrolStationsIds.stream().map(PetrolStationId::new).collect(Collectors.toList()));
-
-    return filter.build();
+    return new ProductFilter.ProductFilterBuilder()
+        .targetProductType(ProductType.findById(targetProductTypeId))
+        .targetPetrolStationsIds(
+            targetPetrolStationsIds.stream().map(PetrolStationId::new).collect(Collectors.toList()))
+        .pageRequested(Page.of(maxPrices))
+        .build();
   }
 }

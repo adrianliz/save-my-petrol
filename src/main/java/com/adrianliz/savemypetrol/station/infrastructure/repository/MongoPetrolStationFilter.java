@@ -12,8 +12,6 @@ public final class MongoPetrolStationFilter {
     log.info("MongoPetrolStationFilter> Filtering by: {}", filter);
     return NearQuery.near(filter.sourceLongitude(), filter.sourceLatitude())
         .maxDistance(filter.maxKmFromSource(), Metrics.KILOMETERS)
-        .spherical(true)
-        .skip(filter.offset())
-        .limit(filter.maxElements());
+        .spherical(true);
   }
 }

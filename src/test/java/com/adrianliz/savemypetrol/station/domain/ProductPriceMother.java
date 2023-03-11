@@ -12,6 +12,10 @@ public final class ProductPriceMother {
   }
 
   public static ProductPrice random() {
-    return create(LongMother.random(), RandomElementPicker.random(Currency.values()));
+    long cents = LongMother.random();
+    do {
+      cents = LongMother.random();
+    } while (cents <= 0);
+    return create(cents, RandomElementPicker.random(Currency.values()));
   }
 }

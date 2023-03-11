@@ -20,8 +20,9 @@ logging:
           connection: WARN
 
 app:
-  domain: ${APP_DOMAIN}
+  domain: ${APP_DOMAIN:undefined}
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
   stripe:
-    apiKey: ${STRIPE_API_KEY}
-    webhookSecret: ${STRIPE_WEBHOOK_SECRET}
+    enabled: false
+    apiKey: ${STRIPE_API_KEY:undefined}
+    webhookSecret: ${STRIPE_WEBHOOK_SECRET:undefined}

@@ -22,15 +22,19 @@ public class Page implements Serializable {
     return new Page(validNumber, validOffset);
   }
 
+  public static Page of(final Integer maxElements) {
+    return of(maxElements, null);
+  }
+
   public static Page defaultPage() {
     return of(null, null);
   }
 
-  public Integer calculateSkippedElements() {
+  public Integer offset() {
     return offset;
   }
 
-  public Integer calculateMaxElements() {
+  public Integer maxElements() {
     return maxElements;
   }
 

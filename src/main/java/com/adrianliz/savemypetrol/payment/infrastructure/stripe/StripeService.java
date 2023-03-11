@@ -31,8 +31,14 @@ public final class StripeService implements PaymentPageGenerator {
   private final String successPaymentUrl;
 
   public StripeService(
+      @Value("${app.stripe.enabled}") final boolean enabled,
       @Value("${app.stripe.apiKey}") final String apiKey,
       @Value("${app.domain}") final String domain) {
+
+    if (!enabled) {
+      successPaymentUrl = null;
+      return;
+    }
 
     Stripe.apiKey = apiKey;
     Stripe.setMaxNetworkRetries(5);

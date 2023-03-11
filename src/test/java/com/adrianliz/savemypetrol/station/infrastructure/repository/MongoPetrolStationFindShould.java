@@ -3,7 +3,6 @@ package com.adrianliz.savemypetrol.station.infrastructure.repository;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import com.adrianliz.savemypetrol.common.domain.DoubleMother;
-import com.adrianliz.savemypetrol.common.domain.Page;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationFilter;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationLocationMother;
 import java.util.Objects;
@@ -23,7 +22,6 @@ public final class MongoPetrolStationFindShould extends MongoPetrolStationStorag
         new PetrolStationFilter.PetrolStationFilterBuilder()
             .sourceLocation(sourceLocation)
             .maxMetersFromSource(distanceBetweenStations)
-            .pageRequested(Page.defaultPage())
             .build();
 
     final var expectedPetrolStations =

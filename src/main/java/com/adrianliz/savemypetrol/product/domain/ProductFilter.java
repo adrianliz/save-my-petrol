@@ -1,5 +1,6 @@
 package com.adrianliz.savemypetrol.product.domain;
 
+import com.adrianliz.savemypetrol.common.domain.Page;
 import com.adrianliz.savemypetrol.product.domain.exception.InvalidProductFilter;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationId;
 import com.adrianliz.savemypetrol.station.domain.PetrolStationRepository;
@@ -15,27 +16,37 @@ public class ProductFilter {
 
   private final List<PetrolStationId> targetPetrolStationsIds;
   private final ProductType targetProductType;
+  private final Page pageRequested;
 
   public ProductFilter(
-      final List<PetrolStationId> targetPetrolStationsIds, final ProductType targetProductType) {
+      final List<PetrolStationId> targetPetrolStationsIds,
+      final ProductType targetProductType,
+      final Page pageRequested) {
 
-    validate(targetPetrolStationsIds, targetProductType);
+    validate(targetPetrolStationsIds, targetProductType, pageRequested);
     this.targetPetrolStationsIds = targetPetrolStationsIds;
     this.targetProductType = targetProductType;
+    this.pageRequested = pageRequested;
   }
 
   private void validate(
-      final List<PetrolStationId> targetPetrolStationsIds, final ProductType targetProductType) {
+      final List<PetrolStationId> targetPetrolStationsIds,
+      final ProductType targetProductType,
+      final Page pageRequested) {
 
     if (targetPetrolStationsIds == null
         || targetPetrolStationsIds.isEmpty()
-        || targetProductType == null) {
+        || targetProductType == null
+        || pageRequested == null) {
       throw new InvalidProductFilter();
     }
   }
 
   public Flux<Product> applyTo(final Flux<Product> products) {
-    return products.filter(product -> product.hasType(targetProductType)).sort(PRODUCT_COMPARATOR);
+    return products
+        .filter(product -> product.hasType(targetProductType))
+        .sort(PRODUCT_COMPARATOR)
+        .take(pageRequested.maxElements());
   }
 
   public Flux<Product> searchTargetProducts(final PetrolStationRepository repository) {
@@ -57,6 +68,7 @@ public class ProductFilter {
 
     private List<PetrolStationId> targetPetrolStationsIds;
     private ProductType targetProductType;
+    private Page pageRequested;
 
     public ProductFilterBuilder() {}
 
@@ -72,8 +84,13 @@ public class ProductFilter {
       return this;
     }
 
+    public ProductFilterBuilder pageRequested(final Page pageRequested) {
+      this.pageRequested = pageRequested;
+      return this;
+    }
+
     public ProductFilter build() {
-      return new ProductFilter(targetPetrolStationsIds, targetProductType);
+      return new ProductFilter(targetPetrolStationsIds, targetProductType, pageRequested);
     }
   }
 }
