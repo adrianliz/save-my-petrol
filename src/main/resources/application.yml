@@ -1,6 +1,6 @@
 server:
   address: 0.0.0.0
-  port: ${APP_PORT:8080}
+  port: 8080
 
 spring:
   codec:
@@ -20,9 +20,8 @@ logging:
           connection: WARN
 
 app:
-  domain: ${APP_DOMAIN:undefined}
+  baseUrl: ${APP_BASE_URL}
   petrolStationsEndpoint: "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
   stripe:
-    enabled: false
-    apiKey: ${STRIPE_API_KEY:undefined}
-    webhookSecret: ${STRIPE_WEBHOOK_SECRET:undefined}
+    apiKey: ${STRIPE_API_KEY}
+    webhookSecret: ${STRIPE_WEBHOOK_SECRET}

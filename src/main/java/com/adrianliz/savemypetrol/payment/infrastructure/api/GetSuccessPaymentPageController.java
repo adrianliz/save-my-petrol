@@ -16,9 +16,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -33,18 +31,24 @@ import reactor.core.publisher.Flux;
 import reactor.util.retry.Retry;
 
 @RestController
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 @Slf4j
 public final class GetSuccessPaymentPageController implements PaymentsControllerV1 {
 
-  private final RegisterPaymentUseCase registerPaymentUseCase;
   private final StripeService stripeService;
-
-  @Value("classpath:public/success-page.html")
+  private final RegisterPaymentUseCase registerPaymentUseCase;
   private final Resource successPage;
-
-  @Value("classpath:public/error-page.html")
   private final Resource errorPage;
+
+  public GetSuccessPaymentPageController(
+      final RegisterPaymentUseCase registerPaymentUseCase,
+      final StripeService stripeService,
+      @Value("classpath:public/success-page.html") final Resource successPage,
+      @Value("classpath:public/error-page.html") final Resource errorPage) {
+    this.registerPaymentUseCase = registerPaymentUseCase;
+    this.stripeService = stripeService;
+    this.successPage = successPage;
+    this.errorPage = errorPage;
+  }
 
   @GetMapping("/success-page")
   public Flux<DataBuffer> getSuccessPaymentPage(

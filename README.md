@@ -34,18 +34,9 @@ Make a PR resolving one feature/improvement or create new feature/improvement ta
 ## Environment variables
 
 ```bash
-APP_ENV
-APP_DOMAIN
-APP_PORT
-
-MONGO_DB_PORT
-MONGO_ROOT_USER
-MONGO_ROOT_PASSWORD
+APP_BASE_URL
+MONGO_DB_URI
 MONGO_DATABASE
-MONGO_EXPRESS_PORT
-
-MONGO_DB_URI # Needed only for application.yml
-
 STRIPE_API_KEY
 STRIPE_WEBHOOK_SECRET
 ```
