@@ -40,10 +40,10 @@ public final class GetSuccessPaymentPageController implements PaymentsController
   private final RegisterPaymentUseCase registerPaymentUseCase;
   private final StripeService stripeService;
 
-  @Value("classpath:success-page.html")
+  @Value("classpath:public/success-page.html")
   private final Resource successPage;
 
-  @Value("classpath:error-page.html")
+  @Value("classpath:public/error-page.html")
   private final Resource errorPage;
 
   @GetMapping("/success-page")
