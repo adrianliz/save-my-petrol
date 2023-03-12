@@ -6,6 +6,7 @@ import com.adrianliz.savemypetrol.station.infrastructure.repository.record.Mongo
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,14 @@ public final class PetrolStationRetriever {
     return petrolStationsClient
         .get()
         .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<PetrolStationsResponse>() {
-        })
+        .bodyToMono(new ParameterizedTypeReference<PetrolStationsResponse>() {})
         .map(PetrolStationsResponse::getStations)
         .flatMapIterable(
             petrolStations ->
                 petrolStations.stream()
                     .map(PetrolStationResponse::mapToPetrolStation)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .collect(Collectors.toList()));
   }
 

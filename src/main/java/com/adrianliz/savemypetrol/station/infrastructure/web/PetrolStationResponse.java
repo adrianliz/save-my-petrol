@@ -13,15 +13,18 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 @AllArgsConstructor
 @NoArgsConstructor(force = true) // NOTE: Needed for Jackson
 @Getter
+@Slf4j
 public class PetrolStationResponse {
 
   @JsonProperty("IDEESS")
@@ -64,63 +67,68 @@ public class PetrolStationResponse {
         : Math.round(decimalFormatter.parse(price).doubleValue() * 1000);
   }
 
-  @SneakyThrows
-  public PetrolStation mapToPetrolStation() {
-    final DecimalFormat decimalFormatter = new DecimalFormat();
+  public Optional<PetrolStation> mapToPetrolStation() {
+    try {
+      final DecimalFormat decimalFormatter = new DecimalFormat();
 
-    final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-    symbols.setDecimalSeparator(',');
-    symbols.setGroupingSeparator(' ');
-    decimalFormatter.setDecimalFormatSymbols(symbols);
+      final DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+      symbols.setDecimalSeparator(',');
+      symbols.setGroupingSeparator(' ');
+      decimalFormatter.setDecimalFormatSymbols(symbols);
 
-    final List<PetrolStationProduct> petrolStationProducts = new ArrayList<>();
+      final List<PetrolStationProduct> petrolStationProducts = new ArrayList<>();
 
-    final var regular95ParsedPrice = parsePrice(regular95Price, decimalFormatter);
-    if (regular95ParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.REGULAR_95, new ProductPrice(regular95ParsedPrice, Currency.EUR)));
-    }
-    final var regular95PremiumParsedPrice = parsePrice(regular95PremiumPrice, decimalFormatter);
-    if (regular95PremiumParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.REGULAR_95_PREMIUM,
-              new ProductPrice(regular95PremiumParsedPrice, Currency.EUR)));
-    }
-    final var regular98ParsedPrice = parsePrice(regular98Price, decimalFormatter);
-    if (regular98ParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.REGULAR_98, new ProductPrice(regular98ParsedPrice, Currency.EUR)));
-    }
-    final var dieselAParsedPrice = parsePrice(dieselAPrice, decimalFormatter);
-    if (dieselAParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.DIESEL_A, new ProductPrice(dieselAParsedPrice, Currency.EUR)));
-    }
-    final var dieselAPremiumParsedPrice = parsePrice(dieselAPremiumPrice, decimalFormatter);
-    if (dieselAPremiumParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.DIESEL_A_PREMIUM,
-              new ProductPrice(dieselAPremiumParsedPrice, Currency.EUR)));
-    }
-    final var dieselBParsedPrice = parsePrice(dieselBPrice, decimalFormatter);
-    if (dieselBParsedPrice != null) {
-      petrolStationProducts.add(
-          new PetrolStationProduct(
-              ProductType.DIESEL_B, new ProductPrice(dieselBParsedPrice, Currency.EUR)));
-    }
+      final var regular95ParsedPrice = parsePrice(regular95Price, decimalFormatter);
+      if (regular95ParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.REGULAR_95, new ProductPrice(regular95ParsedPrice, Currency.EUR)));
+      }
+      final var regular95PremiumParsedPrice = parsePrice(regular95PremiumPrice, decimalFormatter);
+      if (regular95PremiumParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.REGULAR_95_PREMIUM,
+                new ProductPrice(regular95PremiumParsedPrice, Currency.EUR)));
+      }
+      final var regular98ParsedPrice = parsePrice(regular98Price, decimalFormatter);
+      if (regular98ParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.REGULAR_98, new ProductPrice(regular98ParsedPrice, Currency.EUR)));
+      }
+      final var dieselAParsedPrice = parsePrice(dieselAPrice, decimalFormatter);
+      if (dieselAParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.DIESEL_A, new ProductPrice(dieselAParsedPrice, Currency.EUR)));
+      }
+      final var dieselAPremiumParsedPrice = parsePrice(dieselAPremiumPrice, decimalFormatter);
+      if (dieselAPremiumParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.DIESEL_A_PREMIUM,
+                new ProductPrice(dieselAPremiumParsedPrice, Currency.EUR)));
+      }
+      final var dieselBParsedPrice = parsePrice(dieselBPrice, decimalFormatter);
+      if (dieselBParsedPrice != null) {
+        petrolStationProducts.add(
+            new PetrolStationProduct(
+                ProductType.DIESEL_B, new ProductPrice(dieselBParsedPrice, Currency.EUR)));
+      }
 
-    return new PetrolStation(
-        new PetrolStationId(id),
-        new PetrolStationName(name),
-        new PetrolStationLocation(
-            decimalFormatter.parse(latitude).doubleValue(),
-            decimalFormatter.parse(longitude).doubleValue(),
-            address),
-        petrolStationProducts);
+      return Optional.of(
+          new PetrolStation(
+              new PetrolStationId(id),
+              new PetrolStationName(name),
+              new PetrolStationLocation(
+                  decimalFormatter.parse(latitude).doubleValue(),
+                  decimalFormatter.parse(longitude).doubleValue(),
+                  address),
+              petrolStationProducts));
+    } catch (final Exception ex) {
+      log.error("PetrolStationResponse> Error parsing PetrolStationResponse", ex);
+      return Optional.empty();
+    }
   }
 }
