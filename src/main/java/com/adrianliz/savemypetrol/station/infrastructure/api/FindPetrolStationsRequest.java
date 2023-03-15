@@ -20,8 +20,8 @@ public class FindPetrolStationsRequest {
 
   @NotNull private final Double sourceLongitude;
 
-  @Min(10000)
-  @Max(100000)
+  @Min(5000)
+  @Max(25000)
   private final Double maxMetersFromSource;
 
   public PetrolStationFilter buildFilter() {

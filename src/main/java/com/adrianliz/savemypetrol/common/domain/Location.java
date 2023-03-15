@@ -21,10 +21,10 @@ public abstract class Location implements Serializable {
         && longitude != null
         && !latitude.isNaN()
         && !longitude.isNaN()
-        && latitude.compareTo(-90.0) > 0
-        && latitude.compareTo(90.0) < 0
-        && longitude.compareTo(-180.0) > 0
-        && longitude.compareTo(180.0) < 0;
+        && latitude.compareTo(-90.0) >= 0
+        && latitude.compareTo(90.0) <= 0
+        && longitude.compareTo(-180.0) >= 0
+        && longitude.compareTo(180.0) <= 0;
   }
 
   // SEE: https://stackoverflow.com/a/16794680

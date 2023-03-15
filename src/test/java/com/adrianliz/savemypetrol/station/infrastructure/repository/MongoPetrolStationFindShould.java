@@ -14,8 +14,7 @@ public final class MongoPetrolStationFindShould extends MongoPetrolStationStorag
   void find_near_petrol_stations() {
     final var sourceLocation = PetrolStationLocationMother.random();
     final var targetLocation =
-        PetrolStationLocationMother.move(
-            sourceLocation, DoubleMother.randomBetween(10000L, 100000L));
+        PetrolStationLocationMother.move(sourceLocation, DoubleMother.randomBetween(5000L, 25000L));
     final var distanceBetweenStations = sourceLocation.metersTo(targetLocation);
 
     final var filter =

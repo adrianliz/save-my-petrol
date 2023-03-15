@@ -17,14 +17,7 @@ public class PetrolStationFilter {
   }
 
   private void validate(final Location sourceLocation, final Double maxMetersFromSource) {
-
     if (sourceLocation == null || maxMetersFromSource == null) {
-      throw new InvalidPetrolStationFilter();
-    }
-    final double tenKmInMeters = 10000D;
-    final double oneHundredKmInMeters = 10000D;
-    if (Double.compare(maxMetersFromSource, tenKmInMeters) < 0
-        || Double.compare(maxMetersFromSource, oneHundredKmInMeters) > 1) {
       throw new InvalidPetrolStationFilter();
     }
   }
