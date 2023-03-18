@@ -48,7 +48,7 @@ public final class StripeService implements PaymentPageGenerator {
     try {
       return Optional.ofNullable(Session.retrieve(sessionId));
     } catch (final StripeException ex) {
-      log.error("Error retrieving checkout session", ex);
+      log.error("StripeService> Error when retrieving checkout session", ex);
       return Optional.empty();
     }
   }
@@ -57,7 +57,7 @@ public final class StripeService implements PaymentPageGenerator {
     try {
       return Optional.ofNullable(Subscription.retrieve(subscriptionId));
     } catch (final StripeException ex) {
-      log.error("Error retrieving subscription", ex);
+      log.error("StripeService> Error when retrieving subscription", ex);
       return Optional.empty();
     }
   }
@@ -70,7 +70,7 @@ public final class StripeService implements PaymentPageGenerator {
                   .putMetadata("telegram_user_id", session.getMetadata().get("telegram_user_id"))
                   .build());
     } catch (final StripeException ex) {
-      log.error("Error associating internal user", ex);
+      log.error("StripeService> Error when associating internal user", ex);
     }
   }
 
@@ -79,7 +79,7 @@ public final class StripeService implements PaymentPageGenerator {
       PaymentLink.retrieve(session.getPaymentLink())
           .update(PaymentLinkUpdateParams.builder().setActive(false).build());
     } catch (final StripeException ex) {
-      log.error("Error deactivating payment link", ex);
+      log.error("StripeService> Error when deactivating payment link", ex);
     }
   }
 
@@ -88,7 +88,7 @@ public final class StripeService implements PaymentPageGenerator {
     try {
       final var item =
           Product.list(ProductListParams.builder().setActive(true).build()).getData().stream()
-              .filter(product -> "Save My Petrol Notifications".equals(product.getName()))
+              .filter(product -> product.getName().matches(".*Petrol.*"))
               .findFirst()
               .orElseThrow();
 
@@ -111,7 +111,7 @@ public final class StripeService implements PaymentPageGenerator {
                           .build())
                   .getUrl()));
     } catch (final StripeException ex) {
-      log.error("Error generating payment page", ex);
+      log.error("StripeService> Error when generating payment page", ex);
       return Optional.empty();
     }
   }

@@ -60,7 +60,8 @@ public final class GetSuccessPaymentPageController implements PaymentsController
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     final var subscription = stripeService.getSubscription(session.getSubscription());
     if (subscription.isEmpty()) {
-      log.error("Subscription not found for session {}", sessionId);
+      log.error(
+          "GetSuccessPaymentPageController> Subscription not found for session {}", sessionId);
       return DataBufferUtils.read(errorPage, new DefaultDataBufferFactory(), 4096);
     }
 
@@ -77,14 +78,16 @@ public final class GetSuccessPaymentPageController implements PaymentsController
                   .doAfterRetry(
                       retry ->
                           log.error(
-                              "Error registering payment (retry={})",
+                              "GetSuccessPaymentPageController> "
+                                  + "Error registering payment (retry={})",
                               retry.totalRetries(),
                               retry.failure())))
           .thenMany(DataBufferUtils.read(successPage, new DefaultDataBufferFactory(), 4096))
           .onErrorResume(
               ex -> {
                 log.error(
-                    "Error registering payment (userId={}, session={}, subscription={})",
+                    "GetSuccessPaymentPageController> "
+                        + "Error registering payment (userId={}, session={}, subscription={})",
                     userId,
                     session.getId(),
                     subscription.map(Subscription::getId).orElse("unknown"),
@@ -93,7 +96,8 @@ public final class GetSuccessPaymentPageController implements PaymentsController
               });
     } catch (final Exception ex) {
       log.error(
-          "Error registering payment (userId={}, session={}, subscription={})",
+          "GetSuccessPaymentPageController> "
+              + "Error registering payment (userId={}, session={}, subscription={})",
           userId,
           session.getId(),
           subscription.map(Subscription::getId).orElse("unknown"),

@@ -61,7 +61,7 @@ public final class StripeWebhook {
       }
       return Mono.just("None action executed.");
     } catch (final StripeException ex) {
-      log.error("StripeWebhook> Error handling Stripe event", ex);
+      log.error("StripeWebhook> Error when handling Stripe event", ex);
       return Mono.error(ex);
     }
   }

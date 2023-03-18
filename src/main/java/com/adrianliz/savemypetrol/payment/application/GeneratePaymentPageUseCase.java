@@ -15,8 +15,11 @@ public final class GeneratePaymentPageUseCase {
 
   public Mono<PaymentPageResponse> execute(final PaymentUserId paymentUserId) {
     return Mono.defer(
-        () -> Mono.just(
-            PaymentPageResponse.from(paymentPageGenerator.generate(paymentUserId)
-                .orElseThrow(PaymentPageGenerationError::new))));
+        () ->
+            Mono.just(
+                PaymentPageResponse.from(
+                    paymentPageGenerator
+                        .generate(paymentUserId)
+                        .orElseThrow(PaymentPageGenerationError::new))));
   }
 }
