@@ -17,13 +17,14 @@ import org.testcontainers.containers.wait.strategy.Wait;
 public class MongoTestConfiguration extends AbstractReactiveMongoConfiguration {
 
   private static final MongoDBContainer mongoDbContainer =
-      new MongoDBContainer("mongo:5.0.14").waitingFor(Wait.forListeningPort());
+      new MongoDBContainer("mongo:4.4").withExposedPorts(27017).waitingFor(Wait.forListeningPort());
 
   @Bean
   @Primary
   ReactiveMongoDatabaseFactory mongoClientFactory() {
     return new SimpleReactiveMongoDatabaseFactory(
-        new ConnectionString(mongoDbContainer.getReplicaSetUrl("test")));
+        new ConnectionString(
+            mongoDbContainer.getReplicaSetUrl("test") + "?uuidRepresentation=STANDARD"));
   }
 
   @PostConstruct
@@ -39,10 +40,5 @@ public class MongoTestConfiguration extends AbstractReactiveMongoConfiguration {
   @Override
   protected @NotNull String getDatabaseName() {
     return "test";
-  }
-
-  @Override
-  public boolean autoIndexCreation() {
-    return true;
   }
 }

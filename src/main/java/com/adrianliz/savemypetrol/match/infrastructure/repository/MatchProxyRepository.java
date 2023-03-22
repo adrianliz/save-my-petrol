@@ -65,7 +65,7 @@ public class MatchProxyRepository implements MatchRepository {
         Optional.ofNullable(matchesCache.remove(process)).orElse(Collections.emptyList()));
   }
 
-  private Flux<Match> findMatchesFrom(final PetrolStation petrolStation) {
+  Flux<Match> findMatchesFrom(final PetrolStation petrolStation) {
     final var petrolStationProducts = petrolStation.products();
     if (petrolStationProducts.isEmpty()) {
       return Flux.empty();

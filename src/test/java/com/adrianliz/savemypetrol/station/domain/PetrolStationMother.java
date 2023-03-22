@@ -23,7 +23,7 @@ public final class PetrolStationMother {
         Collections.emptyList());
   }
 
-  public static PetrolStation randomWithLocation(final PetrolStationLocation location) {
+  private static PetrolStation randomWithLocation(final PetrolStationLocation location) {
     return create(
         PetrolStationIdMother.random(),
         PetrolStationNameMother.random(),

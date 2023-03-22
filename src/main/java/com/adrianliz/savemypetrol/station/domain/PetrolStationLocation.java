@@ -35,19 +35,20 @@ public class PetrolStationLocation extends Location {
     }
   }
 
-  public PetrolStationLocation changeAddress(final String newAddress) {
+  PetrolStationLocation changeAddress(final String newAddress) {
     return new PetrolStationLocation(latitude, longitude, newAddress);
   }
 
   // SEE: https://gis.stackexchange.com/a/2964
   // NOTE: This is not accurate, but it's good enough for our purposes
-  public PetrolStationLocation move(final Double distanceInMeters) {
+  PetrolStationLocation move(final Double distanceInMeters) {
     if (distanceInMeters == null || distanceInMeters <= 0) {
       return this;
     }
 
     final var latitude = super.latitude + (distanceInMeters / 111111);
-    final var longitude = super.longitude + (distanceInMeters / 111111) / Math.cos(latitude);
+    final var longitude =
+        super.longitude + (distanceInMeters / (111111 / Math.cos(super.latitude)));
 
     return new PetrolStationLocation(latitude, longitude, address);
   }

@@ -8,7 +8,7 @@ import com.adrianliz.savemypetrol.station.domain.PetrolStationLocationMother;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
-public final class MongoPetrolStationFindShould extends MongoPetrolStationStorageTestCase {
+public final class FindPetrolStationsShould extends MongoPetrolStationStorageTestCase {
 
   @Test
   void find_near_petrol_stations() {
