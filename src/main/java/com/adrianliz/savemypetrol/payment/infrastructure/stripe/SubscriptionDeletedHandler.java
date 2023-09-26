@@ -21,7 +21,9 @@ public final class SubscriptionDeletedHandler {
   private final FindActivePaymentService findActivePaymentService;
   private final UpdatePaymentUseCase updatePaymentUseCase;
 
-  public Mono<Void> handle(final Subscription deletedSubscription) throws StripeException {
+  public Mono<StripeWebhookResult> handle(final Subscription deletedSubscription)
+      throws StripeException {
+
     final var userIdToDelete =
         Long.valueOf(
             Customer.retrieve(deletedSubscription.getCustomer())
@@ -35,6 +37,14 @@ public final class SubscriptionDeletedHandler {
     return findActivePaymentService
         .execute(new PaymentUserId(userIdToDelete))
         .flatMap(payment -> updatePaymentUseCase.execute(payment.cancel(cancelDate)))
-        .mapNotNull(unused -> null);
+        .then(
+            Mono.fromCallable(
+                () ->
+                    new StripeWebhookResult(
+                        "Subscription deleted handled (user="
+                            + userIdToDelete
+                            + "cancelDate="
+                            + cancelDate
+                            + ")")));
   }
 }

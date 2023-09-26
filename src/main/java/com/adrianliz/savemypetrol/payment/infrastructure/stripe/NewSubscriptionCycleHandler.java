@@ -23,22 +23,35 @@ public final class NewSubscriptionCycleHandler {
   private final FindActivePaymentService findActivePaymentService;
   private final UpdatePaymentUseCase updatePaymentUseCase;
 
-  public Mono<Void> handle(final Subscription newSubscription) throws StripeException {
+  public Mono<StripeWebhookResult> handle(final Subscription newSubscription)
+      throws StripeException {
+
     final var userId =
         Long.valueOf(
             Customer.retrieve(newSubscription.getCustomer()).getMetadata().get("telegram_user_id"));
-    final var paymentSubscription =
-        new PaymentSubscription(
-            new PaymentSubscriptionStartDate(
-                LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(newSubscription.getCurrentPeriodStart()), UTC)),
-            new PaymentSubscriptionEndDate(
-                LocalDateTime.ofInstant(
-                    Instant.ofEpochSecond(newSubscription.getCurrentPeriodEnd()), UTC)));
+    final var startDate =
+        new PaymentSubscriptionStartDate(
+            LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(newSubscription.getCurrentPeriodStart()), UTC));
+    final var endDate =
+        new PaymentSubscriptionEndDate(
+            LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(newSubscription.getCurrentPeriodEnd()), UTC));
+    final var paymentSubscription = new PaymentSubscription(startDate, endDate);
 
     return findActivePaymentService
         .execute(new PaymentUserId(userId))
         .flatMap(payment -> updatePaymentUseCase.execute(payment.renew(paymentSubscription)))
-        .mapNotNull(unused -> null);
+        .then(
+            Mono.fromCallable(
+                () ->
+                    new StripeWebhookResult(
+                        "New subscription cycle handled (user="
+                            + userId
+                            + "startDate="
+                            + startDate
+                            + "endDate="
+                            + endDate
+                            + ")")));
   }
 }

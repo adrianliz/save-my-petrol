@@ -47,13 +47,13 @@ public final class StripeWebhook {
           final var newSubscription = Subscription.retrieve(invoice.getSubscription());
           return newSubscriptionCycleHandler
               .handle(newSubscription)
-              .map(unused -> "New subscription cycle handled.");
+              .map(StripeWebhookResult::message);
         }
         case "customer.subscription.deleted" -> {
           final var deletedSubscription = (Subscription) eventBody;
           return subscriptionDeletedHandler
               .handle(deletedSubscription)
-              .map(unused -> "Subscription deleted handled.");
+              .map(StripeWebhookResult::message);
         }
         default -> {
           return Mono.just("None action executed.");

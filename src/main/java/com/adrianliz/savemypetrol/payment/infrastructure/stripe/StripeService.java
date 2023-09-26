@@ -10,6 +10,7 @@ import com.stripe.model.PaymentLink;
 import com.stripe.model.Product;
 import com.stripe.model.Subscription;
 import com.stripe.model.checkout.Session;
+import com.stripe.param.CustomerSearchParams;
 import com.stripe.param.CustomerUpdateParams;
 import com.stripe.param.PaymentLinkCreateParams;
 import com.stripe.param.PaymentLinkCreateParams.AfterCompletion;
@@ -83,12 +84,48 @@ public final class StripeService implements PaymentPageGenerator {
     }
   }
 
+  public void unsubscribe(final Long userId) {
+    try {
+      Optional.ofNullable(
+              Customer.search(
+                  CustomerSearchParams.builder()
+                      .setQuery("metadata['telegram_user_id']:'" + userId + "'")
+                      .addExpand("data.subscriptions")
+                      .build()))
+          .orElseThrow(() -> new RuntimeException("Customer not found in Stripe"))
+          .getData()
+          .stream()
+          .findFirst()
+          .orElseThrow(() -> new RuntimeException("Customer not found in Stripe"))
+          .getSubscriptions()
+          .getData()
+          .stream()
+          .filter(subscription -> !subscription.getStatus().equals("canceled"))
+          .forEach(
+              subscription -> {
+                try {
+                  subscription.cancel();
+                } catch (final StripeException ex) {
+                  log.error("StripeService> Error when unsubscribing", ex);
+                }
+              });
+    } catch (final StripeException ex) {
+      log.error("StripeService> Error when unsubscribing", ex);
+    }
+  }
+
   @Override
   public Optional<PaymentPage> generate(final PaymentUserId paymentUserId) {
     try {
-      final var item =
+      final var monthlySubscriptionProduct =
           Product.list(ProductListParams.builder().setActive(true).build()).getData().stream()
-              .filter(product -> product.getName().matches(".*Petrol.*"))
+              .filter(
+                  product ->
+                      product.getMetadata().entrySet().stream()
+                          .filter(entry -> entry.getKey().equals("monthly_subscription"))
+                          .findFirst()
+                          .map(entry -> entry.getValue().equals("true"))
+                          .orElse(false))
               .findFirst()
               .orElseThrow();
 
@@ -99,7 +136,7 @@ public final class StripeService implements PaymentPageGenerator {
                           .addAllLineItem(
                               List.of(
                                   LineItem.builder()
-                                      .setPrice(item.getDefaultPrice())
+                                      .setPrice(monthlySubscriptionProduct.getDefaultPrice())
                                       .setQuantity(1L)
                                       .build()))
                           .setAfterCompletion(

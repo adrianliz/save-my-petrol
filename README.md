@@ -56,7 +56,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=dev
 Execute:
 
 ```bash 
-docker-compose --env-file ${env_file} up -d mongodb && mvn spring-boot:run -Dspring-boot.run.profiles=dev
+docker-compose --env-file ${env_file} up -d mongodb && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
 ## Deploy in production with docker
