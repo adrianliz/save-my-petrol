@@ -1,6 +1,11 @@
 server:
-  address: 0.0.0.0
-  port: 8080
+  ssl:
+    key-store: classpath:save-my-petrol.p12
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-store-type: pkcs12
+    key-alias: save-my-petrol
+    key-password: ${KEY_STORE_PASSWORD}
+  port: 443
   netty:
     max-initial-line-length: 100MB
 
