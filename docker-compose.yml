@@ -8,13 +8,14 @@ services:
     container_name: save-my-petrol
     restart: always
     ports:
-      - "8080:8080"
+      - "443:443"
     environment:
       APP_BASE_URL: ${APP_BASE_URL}
       MONGO_DB_URI: ${MONGO_DB_URI}
       MONGO_DATABASE: ${MONGO_DATABASE}
       STRIPE_API_KEY: ${STRIPE_API_KEY}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+      KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD}
     depends_on:
       - mongodb
     networks:

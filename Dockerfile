@@ -8,7 +8,7 @@ RUN mvn package -Dmaven.test.skip
 FROM amazoncorretto:17-alpine
 WORKDIR /save-my-petrol
 COPY --from=builder /save-my-petrol/target/*.jar /save-my-petrol/save-my-petrol.jar
-EXPOSE 8080
+EXPOSE 443
 CMD java -Dnetworkaddress.cache.ttl=60 -Dfile.encoding=UTF-8 -Xmx300m \
          -Xss512k -XX:CICompilerCount=2 -XX:+UseContainerSupport \
          -jar /save-my-petrol/save-my-petrol.jar
