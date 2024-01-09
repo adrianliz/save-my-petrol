@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -30,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.util.retry.Retry;
 
+@ConditionalOnProperty(name = "stripe.enabled", havingValue = "true")
 @RestController
 @Slf4j
 public final class GetSuccessPaymentPageController implements PaymentsControllerV1 {

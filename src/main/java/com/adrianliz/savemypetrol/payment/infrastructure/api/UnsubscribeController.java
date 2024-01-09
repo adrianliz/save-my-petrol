@@ -7,11 +7,13 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.stripe.StripeService;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+@ConditionalOnProperty(name = "stripe.enabled", havingValue = "true")
 @RestController
 @AllArgsConstructor
 public final class UnsubscribeController implements PaymentsControllerV1 {

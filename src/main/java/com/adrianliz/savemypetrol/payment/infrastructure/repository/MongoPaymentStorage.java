@@ -8,12 +8,14 @@ import com.adrianliz.savemypetrol.payment.domain.PaymentUserId;
 import com.adrianliz.savemypetrol.payment.infrastructure.repository.record.PaymentRecord;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+@ConditionalOnProperty(name = "stripe.enabled", havingValue = "true")
 @Repository
 @AllArgsConstructor
 public class MongoPaymentStorage implements PaymentRepository {

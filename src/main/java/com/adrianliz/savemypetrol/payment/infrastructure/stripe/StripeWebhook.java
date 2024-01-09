@@ -6,12 +6,14 @@ import com.stripe.model.Subscription;
 import com.stripe.net.Webhook;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+@ConditionalOnProperty(name = "stripe.enabled", havingValue = "true")
 @RestController
 @Slf4j
 public final class StripeWebhook {
