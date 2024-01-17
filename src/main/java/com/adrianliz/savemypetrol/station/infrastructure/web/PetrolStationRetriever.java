@@ -39,8 +39,8 @@ public final class PetrolStationRetriever {
                     .collect(Collectors.toList()));
   }
 
-  // NOTE: Every 30 min
-  @Scheduled(fixedDelay = 1800000)
+  // NOTE: Every 30 min except from 00:00 to 07:00
+  @Scheduled(cron = "0 0/30 7-23 * * *")
   public void persistPetrolStations() {
     log.info("PetrolStationRetriever> Starting at {}", LocalDateTime.now());
     final var startTime = Instant.now();
